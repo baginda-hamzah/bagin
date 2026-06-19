@@ -1,0 +1,448 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);background:transparent}
+.phone{max-width:380px;margin:0 auto;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-xl);overflow:hidden;min-height:600px}
+.top-bar{background:#8B0000;padding:16px 20px 12px;color:#fff}
+.top-bar .label{font-size:11px;opacity:.75;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+.top-bar h1{font-size:18px;font-weight:500;line-height:1.2}
+.progress-wrap{padding:12px 20px 0;background:#8B0000}
+.progress-steps{display:flex;gap:4px;padding-bottom:14px}
+.step-dot{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.3);transition:background .3s}
+.step-dot.done{background:#F7DC6F}
+.step-dot.active{background:#fff}
+.content{padding:20px}
+.section-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#8B0000;background:#FDF0F0;padding:4px 10px;border-radius:20px;margin-bottom:12px;border:0.5px solid #F5B7B1}
+.section-title{font-size:16px;font-weight:500;margin-bottom:6px;color:var(--color-text-primary)}
+.section-desc{font-size:13px;color:var(--color-text-secondary);margin-bottom:20px;line-height:1.5}
+.field-label{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.field-label .hint{font-weight:400;font-size:11px;color:var(--color-text-tertiary)}
+.input-wrap{position:relative;margin-bottom:16px}
+.rp-prefix{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--color-text-secondary);pointer-events:none}
+.money-input{width:100%;padding:10px 12px 10px 40px;font-size:15px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);outline:none;font-family:var(--font-sans)}
+.money-input:focus{border-color:#8B0000;box-shadow:0 0 0 2px rgba(139,0,0,.1)}
+.choose-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.choose-btn{padding:10px 8px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);cursor:pointer;text-align:center;font-size:12px;color:var(--color-text-primary);font-family:var(--font-sans);transition:all .15s;line-height:1.3}
+.choose-btn .icon{font-size:18px;display:block;margin-bottom:4px}
+.choose-btn.active{border-color:#8B0000;background:#FDF0F0;color:#8B0000}
+.slider-wrap{margin-bottom:20px}
+.slider-row{display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-secondary);margin-top:6px}
+.slider-val{font-size:14px;font-weight:500;color:#8B0000;text-align:right;margin-top:4px}
+.nav-row{display:flex;gap:10px;padding:16px 20px;border-top:0.5px solid var(--color-border-tertiary)}
+.btn-back{flex:1;padding:11px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;cursor:pointer;font-size:14px;color:var(--color-text-secondary);font-family:var(--font-sans)}
+.btn-next{flex:2;padding:11px;border:none;border-radius:var(--border-radius-md);background:#8B0000;cursor:pointer;font-size:14px;font-weight:500;color:#fff;font-family:var(--font-sans);transition:background .15s}
+.btn-next:hover{background:#A00000}
+.btn-next:active{background:#700000;transform:scale(.98)}
+.category-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.category-row:last-child{border:none}
+.cat-left{display:flex;align-items:center;gap:10px}
+.cat-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.cat-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.cat-sub{font-size:11px;color:var(--color-text-secondary)}
+.cat-amount{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.worry-card{padding:12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:8px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px}
+.worry-card.active{border-color:#8B0000;background:#FDF0F0}
+.worry-dot{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.worry-card.active .worry-dot{background:#8B0000;border-color:#8B0000}
+.worry-dot::after{content:'';display:block;width:6px;height:6px;border-radius:50%;background:#fff;opacity:0}
+.worry-card.active .worry-dot::after{opacity:1}
+.worry-text{font-size:13px;color:var(--color-text-primary);line-height:1.4}
+.result-card{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:12px;border:0.5px solid var(--color-border-tertiary)}
+.result-type-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;margin-bottom:8px}
+.type-red{background:#FDEDEC;color:#C0392B}
+.type-yellow{background:#FEF9E7;color:#B7770D}
+.type-green{background:#EAFAF1;color:#1E8449}
+.cashflow-bar{height:8px;border-radius:4px;margin:8px 0;background:var(--color-border-tertiary);overflow:hidden}
+.cashflow-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.stat-box{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px}
+.stat-num{font-size:18px;font-weight:500;margin-bottom:2px}
+.stat-lbl{font-size:11px;color:var(--color-text-secondary)}
+.insight-row{display:flex;gap:8px;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.insight-row:last-child{border:none}
+.insight-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.insight-text{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.insight-text strong{color:var(--color-text-primary);font-weight:500}
+.step-screen{display:none}
+.step-screen.active{display:block}
+.celebration{text-align:center;padding:20px 0 16px}
+.celebration .big-emoji{font-size:48px;margin-bottom:8px}
+.celebration h2{font-size:17px;font-weight:500;margin-bottom:6px}
+.celebration p{font-size:13px;color:var(--color-text-secondary);line-height:1.5}
+.action-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start}
+.action-num{width:22px;height:22px;background:#8B0000;border-radius:50%;color:#fff;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.action-text{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.action-text strong{color:var(--color-text-primary);display:block;margin-bottom:2px;font-size:13px}
+.share-btn{width:100%;padding:12px;background:#8B0000;border:none;border-radius:var(--border-radius-md);color:#fff;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:8px}
+</style>
+
+<div class="phone">
+  <div class="top-bar">
+    <div class="label">LONTARA 2026</div>
+    <h1>Personal Financial Mapping</h1>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-steps" id="progressSteps">
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+  </div>
+
+  <div id="screen0" class="step-screen active">
+    <div class="content">
+      <span class="section-tag"><i class="ti ti-map" aria-hidden="true"></i> Langkah 1 dari 5</span>
+      <div class="section-title">Pemasukan bulananmu</div>
+      <div class="section-desc">Isi semua sumber penghasilan yang kamu terima tiap bulan — boleh estimasi.</div>
+
+      <div class="field-label">Gaji / Uang saku pokok <span class="hint">wajib</span></div>
+      <div class="input-wrap">
+        <span class="rp-prefix">Rp</span>
+        <input class="money-input" id="inc_main" type="number" placeholder="0" min="0" oninput="formatNum(this)">
+      </div>
+
+      <div class="field-label">Freelance / Side hustle <span class="hint">opsional</span></div>
+      <div class="input-wrap">
+        <span class="rp-prefix">Rp</span>
+        <input class="money-input" id="inc_side" type="number" placeholder="0" min="0">
+      </div>
+
+      <div class="field-label">Kiriman orang tua / beasiswa <span class="hint">opsional</span></div>
+      <div class="input-wrap">
+        <span class="rp-prefix">Rp</span>
+        <input class="money-input" id="inc_other" type="number" placeholder="0" min="0">
+      </div>
+
+      <div class="result-card" style="background:#FDF0F0;border-color:#F5B7B1">
+        <div style="font-size:11px;color:#C0392B;margin-bottom:4px;font-weight:500">TOTAL PEMASUKAN / BULAN</div>
+        <div style="font-size:22px;font-weight:500;color:#8B0000" id="inc_total">Rp 0</div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-next" style="flex:1" onclick="goTo(1)"><i class="ti ti-arrow-right" aria-hidden="true"></i> Lanjut</button>
+    </div>
+  </div>
+
+  <div id="screen1" class="step-screen">
+    <div class="content">
+      <span class="section-tag"><i class="ti ti-home" aria-hidden="true"></i> Langkah 2 dari 5</span>
+      <div class="section-title">Pengeluaran tetap</div>
+      <div class="section-desc">Biaya yang selalu ada setiap bulan dan jumlahnya relatif sama.</div>
+
+      <div class="field-label">Kos / Kontrakan</div>
+      <div class="input-wrap">
+        <span class="rp-prefix">Rp</span>
+        <input class="money-input" id="fix_kos" type="number" placeholder="0" min="0">
+      </div>
+      <div class="field-label">Cicilan (HP, motor, dll)</div>
+      <div class="input-wrap">
+        <span class="rp-prefix">Rp</span>
+        <input class="money-input" id="fix_cicilan" type="number" placeholder="0" min="0">
+      </div>
+      <div class="field-label">Paylater aktif (total tagihan)</div>
+      <div class="input-wrap">
+        <span class="rp-prefix">Rp</span>
+        <input class="money-input" id="fix_paylater" type="number" placeholder="0" min="0">
+      </div>
+      <div class="field-label">Langganan digital (Spotify, Netflix, dll)</div>
+      <div class="input-wrap">
+        <span class="rp-prefix">Rp</span>
+        <input class="money-input" id="fix_sub" type="number" placeholder="0" min="0">
+      </div>
+
+      <div class="result-card" style="background:#FEF3E2;border-color:#FAD7A0">
+        <div style="font-size:11px;color:#B7770D;margin-bottom:4px;font-weight:500">TOTAL PENGELUARAN TETAP</div>
+        <div style="font-size:22px;font-weight:500;color:#8B6914" id="fix_total">Rp 0</div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goTo(0)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Kembali</button>
+      <button class="btn-next" onclick="goTo(2)">Lanjut <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <div id="screen2" class="step-screen">
+    <div class="content">
+      <span class="section-tag"><i class="ti ti-shopping-cart" aria-hidden="true"></i> Langkah 3 dari 5</span>
+      <div class="section-title">Pengeluaran variabel</div>
+      <div class="section-desc">Estimasi rata-rata pengeluaran bulanan untuk kebutuhan sehari-hari.</div>
+
+      <div class="field-label">Makan & minum</div>
+      <div class="input-wrap">
+        <span class="rp-prefix">Rp</span>
+        <input class="money-input" id="var_makan" type="number" placeholder="0" min="0">
+      </div>
+      <div class="field-label">Transportasi</div>
+      <div class="input-wrap">
+        <span class="rp-prefix">Rp</span>
+        <input class="money-input" id="var_transport" type="number" placeholder="0" min="0">
+      </div>
+      <div class="field-label">Hiburan & nongkrong</div>
+      <div class="input-wrap">
+        <span class="rp-prefix">Rp</span>
+        <input class="money-input" id="var_hiburan" type="number" placeholder="0" min="0">
+      </div>
+      <div class="field-label">Belanja & lainnya</div>
+      <div class="input-wrap">
+        <span class="rp-prefix">Rp</span>
+        <input class="money-input" id="var_belanja" type="number" placeholder="0" min="0">
+      </div>
+
+      <div class="result-card" style="background:#F4ECF7;border-color:#D7BDE2">
+        <div style="font-size:11px;color:#7D3C98;margin-bottom:4px;font-weight:500">TOTAL PENGELUARAN VARIABEL</div>
+        <div style="font-size:22px;font-weight:500;color:#6C3483" id="var_total">Rp 0</div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goTo(1)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Kembali</button>
+      <button class="btn-next" onclick="goTo(3)">Lanjut <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <div id="screen3" class="step-screen">
+    <div class="content">
+      <span class="section-tag"><i class="ti ti-mood-smile" aria-hidden="true"></i> Langkah 4 dari 5</span>
+      <div class="section-title">Kebiasaan & kondisi sekarang</div>
+      <div class="section-desc">Pilih yang paling menggambarkan kondisimu saat ini.</div>
+
+      <div class="field-label" style="margin-bottom:8px">Seberapa sering kamu menyimpan uang?</div>
+      <div class="choose-grid" id="habitGrid">
+        <button class="choose-btn" data-val="never" onclick="pickHabit(this)"><span class="icon">😰</span>Tidak pernah</button>
+        <button class="choose-btn" data-val="rare" onclick="pickHabit(this)"><span class="icon">😅</span>Jarang banget</button>
+        <button class="choose-btn" data-val="sometimes" onclick="pickHabit(this)"><span class="icon">😐</span>Kadang-kadang</button>
+        <button class="choose-btn" data-val="always" onclick="pickHabit(this)"><span class="icon">😊</span>Rutin setiap bulan</button>
+      </div>
+
+      <div class="field-label" style="margin:12px 0 8px">Punya dana darurat?</div>
+      <div class="choose-grid" id="emergencyGrid">
+        <button class="choose-btn" data-val="none" onclick="pickEmergency(this)"><span class="icon">🚫</span>Belum ada</button>
+        <button class="choose-btn" data-val="small" onclick="pickEmergency(this)"><span class="icon">💧</span>Ada, tapi kecil</button>
+        <button class="choose-btn" data-val="one" onclick="pickEmergency(this)"><span class="icon">💰</span>1–2 bulan</button>
+        <button class="choose-btn" data-val="three" onclick="pickEmergency(this)"><span class="icon">🏦</span>3+ bulan</button>
+      </div>
+
+      <div class="field-label" style="margin:12px 0 8px">Apa yang paling kamu khawatirkan soal keuangan?</div>
+      <div id="worryList">
+        <div class="worry-card" onclick="pickWorry(this)" data-val="bokek"><div class="worry-dot"></div><span class="worry-text">Sering bokek sebelum akhir bulan</span></div>
+        <div class="worry-card" onclick="pickWorry(this)" data-val="utang"><div class="worry-dot"></div><span class="worry-text">Utang / cicilan yang menumpuk</span></div>
+        <div class="worry-card" onclick="pickWorry(this)" data-val="masa_depan"><div class="worry-dot"></div><span class="worry-text">Tidak punya rencana masa depan</span></div>
+        <div class="worry-card" onclick="pickWorry(this)" data-val="fomo"><div class="worry-dot"></div><span class="worry-text">Sering FOMO & belanja impulsif</span></div>
+        <div class="worry-card" onclick="pickWorry(this)" data-val="invest"><div class="worry-dot"></div><span class="worry-text">Ingin mulai investasi tapi bingung</span></div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goTo(2)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Kembali</button>
+      <button class="btn-next" onclick="goTo(4)">Lihat hasil <i class="ti ti-chart-bar" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <div id="screen4" class="step-screen">
+    <div class="content" id="resultContent"></div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goTo(3)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Kembali</button>
+      <button class="btn-next" onclick="sendPrompt('Saya sudah mengisi Personal Financial Mapping. Tolong berikan saran keuangan personal untuk kondisi saya.')">Minta saran <i class="ti ti-arrow-up-right" aria-hidden="true"></i></button>
+    </div>
+  </div>
+</div>
+
+<script>
+const screens = [0,1,2,3,4];
+let currentStep = 0;
+let habits = {};
+
+function goTo(n){
+  document.querySelectorAll('.step-screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen'+n).classList.add('active');
+  currentStep = n;
+  updateProgress();
+  if(n===4) buildResult();
+  window.scrollTo && window.scrollTo(0,0);
+}
+
+function updateProgress(){
+  document.querySelectorAll('.step-dot').forEach((d,i)=>{
+    d.className = 'step-dot';
+    if(i<currentStep) d.classList.add('done');
+    else if(i===currentStep) d.classList.add('active');
+  });
+}
+
+function getNum(id){return parseFloat(document.getElementById(id).value)||0}
+
+function fmt(n){
+  if(n>=1000000) return 'Rp '+(n/1000000).toFixed(1).replace(/\.0$/,'')+'jt';
+  if(n>=1000) return 'Rp '+(n/1000).toFixed(0)+'rb';
+  return 'Rp '+Math.round(n);
+}
+
+function fmtFull(n){return 'Rp '+Math.round(n).toLocaleString('id-ID')}
+
+function calcInc(){return getNum('inc_main')+getNum('inc_side')+getNum('inc_other')}
+function calcFix(){return getNum('fix_kos')+getNum('fix_cicilan')+getNum('fix_paylater')+getNum('fix_sub')}
+function calcVar(){return getNum('var_makan')+getNum('var_transport')+getNum('var_hiburan')+getNum('var_belanja')}
+
+['inc_main','inc_side','inc_other'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',()=>{
+    document.getElementById('inc_total').textContent = fmtFull(calcInc());
+  });
+});
+['fix_kos','fix_cicilan','fix_paylater','fix_sub'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',()=>{
+    document.getElementById('fix_total').textContent = fmtFull(calcFix());
+  });
+});
+['var_makan','var_transport','var_hiburan','var_belanja'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',()=>{
+    document.getElementById('var_total').textContent = fmtFull(calcVar());
+  });
+});
+
+function pickHabit(el){
+  document.querySelectorAll('#habitGrid .choose-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active'); habits.saving = el.dataset.val;
+}
+function pickEmergency(el){
+  document.querySelectorAll('#emergencyGrid .choose-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active'); habits.emergency = el.dataset.val;
+}
+function pickWorry(el){
+  document.querySelectorAll('#worryList .worry-card').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active'); habits.worry = el.dataset.val;
+}
+
+function buildResult(){
+  const inc = calcInc();
+  const fix = calcFix();
+  const varr = calcVar();
+  const total_out = fix + varr;
+  const sisa = inc - total_out;
+  const rasio = inc > 0 ? Math.round((total_out/inc)*100) : 0;
+  const paylater = getNum('fix_paylater');
+  const cicilan = getNum('fix_cicilan');
+  const debtRatio = inc > 0 ? Math.round(((paylater+cicilan)/inc)*100) : 0;
+  const saving = habits.saving || 'never';
+  const emergency = habits.emergency || 'none';
+
+  let tipe, tipeBadge, tipeClass, tipeDesc, tipeColor;
+  if(sisa < 0 || rasio > 90 || debtRatio > 40){
+    tipe = '🔴 Merah — Di Bawah Tekanan';
+    tipeBadge = 'Tipe Merah'; tipeClass = 'type-red'; tipeColor = '#E74C3C';
+    tipeDesc = 'Pengeluaranmu melebihi atau hampir menyamai pemasukan. Ini situasi yang perlu segera diperbaiki.';
+  } else if(saving === 'never' || saving === 'rare' || emergency === 'none' || sisa < inc*0.1){
+    tipe = '🟡 Kuning — Aman Tapi Stagnan';
+    tipeBadge = 'Tipe Kuning'; tipeClass = 'type-yellow'; tipeColor = '#F39C12';
+    tipeDesc = 'Cashflow-mu cukup seimbang, tapi belum ada pertumbuhan. Potensinya besar — tinggal satu langkah.';
+  } else {
+    tipe = '🟢 Hijau — Bertumbuh';
+    tipeBadge = 'Tipe Hijau'; tipeClass = 'type-green'; tipeColor = '#27AE60';
+    tipeDesc = 'Kamu dalam kondisi finansial yang sehat. Saatnya optimalkan dan mulai berinvestasi lebih serius.';
+  }
+
+  const barPct = Math.min(rasio, 100);
+  const barColor = rasio > 90 ? '#E74C3C' : rasio > 70 ? '#F39C12' : '#27AE60';
+
+  const worryMap = {
+    bokek:'Sering bokek di akhir bulan', utang:'Utang/cicilan menumpuk',
+    masa_depan:'Belum punya rencana keuangan', fomo:'Belanja impulsif & FOMO',
+    invest:'Ingin mulai investasi'
+  };
+
+  const actions = buildActions(tipe, sisa, inc, debtRatio, habits);
+
+  document.getElementById('resultContent').innerHTML = `
+    <div class="celebration">
+      <div class="big-emoji">${tipe.split(' ')[0]}</div>
+      <h2>Hasil Pemetaan Keuanganmu</h2>
+      <p>Ini bukan vonis — ini titik awal yang jujur.</p>
+    </div>
+
+    <div class="result-card">
+      <span class="result-type-badge ${tipeClass}">${tipeBadge}</span>
+      <div style="font-size:14px;font-weight:500;margin-bottom:6px;color:var(--color-text-primary)">${tipe}</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.5;margin-bottom:12px">${tipeDesc}</div>
+
+      <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:4px">Rasio pengeluaran vs pemasukan</div>
+      <div class="cashflow-bar"><div class="cashflow-fill" style="width:${barPct}%;background:${barColor}"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-secondary)">
+        <span>0%</span><span style="font-weight:500;color:${barColor}">${rasio}%</span><span>100%</span>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="stat-num" style="color:${sisa>=0?'#27AE60':'#E74C3C'}">${fmt(Math.abs(sisa))}</div>
+        <div class="stat-lbl">${sisa>=0?'Sisa / bisa ditabung':'Defisit per bulan'}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:#8B0000">${rasio}%</div>
+        <div class="stat-lbl">Pengeluaran dari pemasukan</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:${debtRatio>30?'#E74C3C':'#555'}">${debtRatio}%</div>
+        <div class="stat-lbl">Rasio utang/cicilan</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:#555">${inc>0?Math.round((sisa/inc)*100):0}%</div>
+        <div class="stat-lbl">Potensi tabungan</div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:500;margin:16px 0 8px">Rincian cashflow</div>
+    <div class="result-card" style="padding:12px">
+      ${[
+        {icon:'ti-trending-up',label:'Total pemasukan',val:fmtFull(inc),col:'#27AE60'},
+        {icon:'ti-home',label:'Pengeluaran tetap',val:fmtFull(fix),col:'#E74C3C'},
+        {icon:'ti-shopping-cart',label:'Pengeluaran variabel',val:fmtFull(varr),col:'#F39C12'},
+        {icon:'ti-calculator',label:'Total keluar',val:fmtFull(total_out),col:'#8B0000'},
+        {icon:'ti-piggy-bank',label:'Sisa / surplus',val:fmtFull(sisa),col:sisa>=0?'#27AE60':'#E74C3C'},
+      ].map(r=>`
+        <div class="category-row">
+          <div class="cat-left">
+            <div class="cat-icon" style="background:${r.col}20"><i class="ti ${r.icon}" style="color:${r.col};font-size:15px" aria-hidden="true"></i></div>
+            <div>
+              <div class="cat-name">${r.label}</div>
+            </div>
+          </div>
+          <div class="cat-amount" style="color:${r.col}">${r.val}</div>
+        </div>`).join('')}
+    </div>
+
+    ${habits.worry ? `<div style="font-size:11px;color:var(--color-text-secondary);margin:4px 0 8px">Kamu khawatir tentang: <strong style="color:var(--color-text-primary)">${worryMap[habits.worry]||'-'}</strong></div>` : ''}
+
+    <div style="font-size:13px;font-weight:500;margin:16px 0 8px">Rekomendasi untukmu</div>
+    ${actions.map((a,i)=>`
+      <div class="action-card">
+        <div class="action-num">${i+1}</div>
+        <div class="action-text"><strong>${a.title}</strong>${a.desc}</div>
+      </div>`).join('')}
+  `;
+}
+
+function buildActions(tipe, sisa, inc, debtRatio, habits){
+  const acts = [];
+  if(sisa < 0){
+    acts.push({title:'Identifikasi pengeluaran darurat',desc:'Pengeluaranmu melebihi pemasukan. Prioritas pertama: kurangi 1 kategori variabel minimal 20% bulan ini.'});
+    acts.push({title:'Stop paylater baru',desc:'Jangan tambah utang baru. Fokus lunasi yang ada sekarang dimulai dari yang bunganya paling tinggi.'});
+  } else if(sisa < inc * 0.1){
+    acts.push({title:'Terapkan metode 50/30/20',desc:'50% kebutuhan, 30% keinginan, 20% tabungan. Mulai dari porsi berapapun yang bisa kamu capai sekarang.'});
+  } else {
+    acts.push({title:'Otomatiskan tabungan',desc:'Transfer '+fmt(sisa*0.5)+' ke rekening terpisah di hari yang sama saat terima penghasilan. Jangan tunggu sisa.'});
+  }
+  if(habits.emergency === 'none' || habits.emergency === 'small'){
+    acts.push({title:'Bangun dana darurat',desc:'Target minimal 3× pengeluaran bulanan ('+fmt((getNum('fix_kos')+calcVar())*3)+'). Ini prioritas sebelum investasi apapun.'});
+  }
+  if(debtRatio > 30){
+    acts.push({title:'Strategi lunasi utang',desc:'Rasio utangmu '+debtRatio+'% dari pemasukan — di atas batas aman 30%. Coba metode avalanche: lunasi cicilan bunga tertinggi dulu.'});
+  }
+  if(habits.saving === 'never' || habits.saving === 'rare'){
+    acts.push({title:'Mulai reksa dana pasar uang',desc:'Rp50.000/bulan sudah cukup untuk memulai. Gunakan Bibit atau Bareksa. Yang penting konsisten dulu, bukan besar.'});
+  }
+  if(habits.worry === 'invest'){
+    acts.push({title:'Pelajari reksa dana dulu',desc:'Mulai dengan reksa dana pasar uang — paling aman untuk pemula. Risiko rendah, bisa dicairkan kapan saja.'});
+  }
+  if(acts.length < 2) acts.push({title:'Diversifikasi penghasilan',desc:'Kondisimu sudah baik. Langkah selanjutnya: kembangkan 1 sumber penghasilan tambahan dari skill yang kamu miliki.'});
+  return acts.slice(0,4);
+}
+</script>
