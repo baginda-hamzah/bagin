@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#8B0000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Financial Mapping — LONTARA 2026</title>
+<style>
+  :root {
+    --crimson: #8B0000;
+    --crimson-dark: #6B0000;
+    --crimson-light: #FDF0F0;
+    --gold: #F39C12;
+    --gold-light: #FEF9E7;
+    --dark: #1A1A2E;
+    --charcoal: #2C3E50;
+    --white: #FFFFFF;
+    --surface: #F8F9FA;
+    --border: #E8E8E8;
+    --text: #1A1A2E;
+    --text-muted: #6B7280;
+    --text-hint: #9CA3AF;
+    --green: #16A34A;
+    --green-light: #DCFCE7;
+    --yellow: #D97706;
+    --yellow-light: #FEF3C7;
+    --red: #DC2626;
+    --red-light: #FEE2E2;
+    --blue: #2563EB;
+    --purple: #7C3AED;
+    --teal: #0D9488;
+    --orange: #EA580C;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    width: 100%;
+    min-height: 100vh;
+    background: #F0F0F0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Phone shell ── */
+  .app-shell {
+    width: 100%;
+    max-width: 430px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: var(--white);
+    position: relative;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--crimson);
+    color: #fff;
+    padding: calc(var(--safe-top) + 16px) 20px 0;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .header-logo {
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,.15);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .header-brand { font-size: 11px; opacity: .7; letter-spacing: .8px; text-transform: uppercase; }
+  .header-title { font-size: 17px; font-weight: 600; line-height: 1.2; }
+
+  /* ── Progress bar ── */
+  .progress-bar {
+    display: flex;
+    gap: 4px;
+    padding: 12px 0 14px;
+  }
+  .p-seg {
+    flex: 1; height: 3px;
+    background: rgba(255,255,255,.25);
+    border-radius: 2px;
+    transition: background .35s;
+  }
+  .p-seg.done { background: rgba(255,255,255,.6); }
+  .p-seg.active { background: #fff; }
+
+  /* ── Steps info ── */
+  .step-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 20px 14px;
+    background: var(--crimson);
+  }
+  .step-label { font-size: 12px; color: rgba(255,255,255,.75); }
+  .step-counter { font-size: 12px; color: rgba(255,255,255,.55); }
+
+  /* ── Screen system ── */
+  .screens { flex: 1; position: relative; overflow: hidden; }
+  .screen {
+    position: absolute; top: 0; left: 0; right: 0;
+    min-height: 100%;
+    opacity: 0; pointer-events: none;
+    transform: translateX(30px);
+    transition: opacity .28s ease, transform .28s ease;
+  }
+  .screen.active {
+    opacity: 1; pointer-events: auto;
+    transform: translateX(0);
+    position: relative;
+  }
+  .screen.exit-left { transform: translateX(-30px); opacity: 0; }
+
+  /* ── Screen content ── */
+  .screen-body { padding: 24px 20px 120px; }
+
+  .screen-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  .screen-heading { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 6px; line-height: 1.25; }
+  .screen-sub { font-size: 14px; color: var(--text-muted); line-height: 1.55; margin-bottom: 24px; }
+
+  /* ── Field ── */
+  .field { margin-bottom: 20px; }
+  .field-label {
+    font-size: 13px; font-weight: 600;
+    color: var(--text); margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .field-optional { font-size: 11px; font-weight: 400; color: var(--text-hint); }
+  .input-wrap { position: relative; }
+  .rp-tag {
+    position: absolute; left: 14px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px; font-weight: 600;
+    color: var(--text-muted); pointer-events: none;
+  }
+  .money-field {
+    width: 100%;
+    padding: 14px 14px 14px 42px;
+    font-size: 16px; font-weight: 500;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    transition: border-color .2s, background .2s, box-shadow .2s;
+    -webkit-appearance: none;
+    font-family: inherit;
+  }
+  .money-field:focus {
+    border-color: var(--crimson);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(139,0,0,.1);
+  }
+  .money-field::placeholder { color: var(--text-hint); font-weight: 400; }
+
+  /* ── Live total card ── */
+  .live-total {
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 8px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .live-label { font-size: 12px; font-weight: 600; letter-spacing: .4px; text-transform: uppercase; opacity: .75; }
+  .live-value { font-size: 22px; font-weight: 700; }
+
+  /* ── Choice grid ── */
+  .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  .choice-card {
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    background: var(--surface);
+    transition: all .18s;
+    -webkit-user-select: none;
+  }
+  .choice-card:active { transform: scale(.97); }
+  .choice-card.picked {
+    border-color: var(--crimson);
+    background: var(--crimson-light);
+  }
+  .choice-emoji { font-size: 26px; margin-bottom: 6px; }
+  .choice-text { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .choice-card.picked .choice-text { color: var(--crimson); }
+
+  /* ── Radio worry ── */
+  .worry-list { display: flex; flex-direction: column; gap: 8px; }
+  .worry-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    background: var(--surface);
+    transition: all .18s;
+  }
+  .worry-item.picked { border-color: var(--crimson); background: var(--crimson-light); }
+  .worry-radio {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all .18s;
+  }
+  .worry-item.picked .worry-radio {
+    border-color: var(--crimson); background: var(--crimson);
+  }
+  .worry-radio::after {
+    content: ''; width: 7px; height: 7px;
+    border-radius: 50%; background: #fff; opacity: 0; transition: opacity .15s;
+  }
+  .worry-item.picked .worry-radio::after { opacity: 1; }
+  .worry-text { font-size: 14px; color: var(--text); line-height: 1.4; }
+  .worry-item.picked .worry-text { color: var(--crimson); font-weight: 500; }
+
+  /* ── Section divider ── */
+  .section-divider {
+    font-size: 11px; font-weight: 700; letter-spacing: .8px;
+    text-transform: uppercase; color: var(--text-hint);
+    margin: 24px 0 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* ── Nav bottom ── */
+  .nav-bottom {
+    position: fixed; bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%; max-width: 430px;
+    padding: 12px 20px calc(var(--safe-bottom) + 12px);
+    background: rgba(255,255,255,.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    display: flex; gap: 10px;
+    z-index: 200;
+  }
+  .btn-back {
+    flex: 1;
+    padding: 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    background: transparent;
+    font-size: 15px; font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer; font-family: inherit;
+    transition: all .15s;
+  }
+  .btn-back:active { background: var(--surface); transform: scale(.98); }
+  .btn-next {
+    flex: 2;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background: var(--crimson);
+    font-size: 15px; font-weight: 700;
+    color: #fff;
+    cursor: pointer; font-family: inherit;
+    transition: all .18s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-next:active { background: var(--crimson-dark); transform: scale(.98); }
+  .btn-next svg { width: 18px; height: 18px; }
+
+  /* ── RESULT screen ── */
+  .result-hero {
+    background: var(--crimson);
+    padding: 32px 20px 24px;
+    text-align: center;
+    color: #fff;
+  }
+  .result-emoji { font-size: 56px; margin-bottom: 8px; }
+  .result-tipe-badge {
+    display: inline-block;
+    padding: 5px 16px;
+    border-radius: 20px;
+    font-size: 13px; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .result-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .result-desc { font-size: 13px; opacity: .8; line-height: 1.55; }
+
+  .result-body { padding: 20px 20px 120px; }
+
+  .stats-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-bottom: 20px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+  }
+  .stat-number { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .stat-desc { font-size: 11px; color: var(--text-muted); line-height: 1.3; }
+
+  /* ── Cashflow bar ── */
+  .cashflow-section {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+  .cashflow-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+  .bar-row { margin-bottom: 10px; }
+  .bar-row-top { display: flex; justify-content: space-between; margin-bottom: 5px; }
+  .bar-label { font-size: 12px; color: var(--text-muted); }
+  .bar-amount { font-size: 12px; font-weight: 600; color: var(--text); }
+  .bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width .8s cubic-bezier(.4,0,.2,1); }
+
+  /* ── Row list ── */
+  .cashflow-rows { display: flex; flex-direction: column; gap: 0; }
+  .cf-row {
+    display: flex; align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+  }
+  .cf-row:last-child { border: none; padding-bottom: 0; }
+  .cf-icon-wrap {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .cf-info { flex: 1; }
+  .cf-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .cf-sub { font-size: 11px; color: var(--text-muted); }
+  .cf-amount { font-size: 14px; font-weight: 700; }
+
+  /* ── Insight cards ── */
+  .insight-card {
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+    display: flex; gap: 12px; align-items: flex-start;
+    border-left: 4px solid;
+  }
+  .insight-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+    color: #fff; margin-top: 1px;
+  }
+  .insight-body { flex: 1; }
+  .insight-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .insight-text { font-size: 12px; line-height: 1.55; }
+
+  /* ── Restart ── */
+  .restart-btn {
+    width: 100%;
+    padding: 14px;
+    margin-top: 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    background: transparent;
+    font-size: 14px; font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer; font-family: inherit;
+    transition: all .15s;
+  }
+  .restart-btn:active { background: var(--surface); }
+
+  /* ── Splash screen ── */
+  #splash {
+    min-height: 100vh;
+    background: var(--crimson);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 32px;
+    text-align: center;
+    color: #fff;
+  }
+  .splash-logo { font-size: 56px; margin-bottom: 20px; }
+  .splash-tag {
+    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    opacity: .6; margin-bottom: 12px; font-weight: 600;
+  }
+  .splash-title { font-size: 28px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+  .splash-sub { font-size: 15px; opacity: .7; line-height: 1.6; margin-bottom: 40px; }
+  .splash-features { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-bottom: 40px; }
+  .splash-feat {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,.1);
+    border-radius: 12px; padding: 12px 14px;
+    text-align: left;
+  }
+  .splash-feat-icon { font-size: 22px; flex-shrink: 0; }
+  .splash-feat-text { font-size: 13px; opacity: .85; line-height: 1.4; }
+  .splash-feat-text strong { display: block; font-size: 14px; opacity: 1; margin-bottom: 2px; }
+  .btn-start {
+    width: 100%;
+    padding: 18px;
+    background: #fff;
+    border: none;
+    border-radius: 16px;
+    font-size: 17px; font-weight: 800;
+    color: var(--crimson);
+    cursor: pointer; font-family: inherit;
+    transition: all .18s;
+    letter-spacing: .2px;
+  }
+  .btn-start:active { transform: scale(.98); }
+  .splash-lontara {
+    margin-top: 24px;
+    font-size: 11px; opacity: .5; letter-spacing: .5px;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .anim-in { animation: fadeUp .4s ease both; }
+
+  @media (min-width: 431px) {
+    body { display: flex; align-items: flex-start; justify-content: center; }
+    .app-shell { box-shadow: 0 0 60px rgba(0,0,0,.15); min-height: 100vh; }
+    #splash { min-height: 100vh; max-width: 430px; border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-logo">💰</div>
+  <p class="splash-tag">LONTARA 2026 · Duta Pemuda Makassar</p>
+  <h1 class="splash-title">Personal Financial Mapping</h1>
+  <p class="splash-sub">Kenali kondisi keuanganmu secara jujur dalam 5 langkah mudah.</p>
+  <div class="splash-features">
+    <div class="splash-feat">
+      <span class="splash-feat-icon">📊</span>
+      <div class="splash-feat-text">
+        <strong>Pemetaan Cashflow</strong>
+        Isi pemasukan dan pengeluaran bulananmu
+      </div>
+    </div>
+    <div class="splash-feat">
+      <span class="splash-feat-icon">🎯</span>
+      <div class="splash-feat-text">
+        <strong>Tipe Keuanganmu</strong>
+        Merah, Kuning, atau Hijau — cari tahu posisimu
+      </div>
+    </div>
+    <div class="splash-feat">
+      <span class="splash-feat-icon">💡</span>
+      <div class="splash-feat-text">
+        <strong>Rekomendasi Personal</strong>
+        Langkah konkret sesuai kondisi masing-masing
+      </div>
+    </div>
+  </div>
+  <button class="btn-start" onclick="startApp()">Mulai Asesmen →</button>
+  <p class="splash-lontara">Money Mindset · Baginda Hamzah, S.T., M.B.A</p>
+</div>
+
+<!-- APP -->
+<div class="app-shell" id="appShell" style="display:none">
+
+  <!-- Header sticky -->
+  <div class="header">
+    <div class="header-top">
+      <div class="header-logo">💰</div>
+      <div>
+        <div class="header-brand">LONTARA 2026</div>
+        <div class="header-title">Financial Mapping</div>
+      </div>
+    </div>
+    <div class="progress-bar" id="progressBar">
+      <div class="p-seg active" id="ps0"></div>
+      <div class="p-seg" id="ps1"></div>
+      <div class="p-seg" id="ps2"></div>
+      <div class="p-seg" id="ps3"></div>
+      <div class="p-seg" id="ps4"></div>
+    </div>
+    <div class="step-info">
+      <span class="step-label" id="stepLabel">Langkah 1 dari 5</span>
+      <span class="step-counter" id="stepCounter">Pemasukan</span>
+    </div>
+  </div>
+
+  <!-- Screens -->
+  <div class="screens" id="screensWrap">
+
+    <!-- SCREEN 0: Pemasukan -->
+    <div class="screen active" id="sc0">
+      <div class="screen-body">
+        <div class="screen-icon" style="background:#FEF3C7">💵</div>
+        <h2 class="screen-heading">Berapa pemasukanmu?</h2>
+        <p class="screen-sub">Isi semua sumber penghasilan yang kamu terima tiap bulan. Boleh pakai estimasi.</p>
+
+        <div class="field">
+          <div class="field-label">Gaji / Uang saku pokok</div>
+          <div class="input-wrap">
+            <span class="rp-tag">Rp</span>
+            <input class="money-field" id="f_main" type="number" inputmode="numeric" placeholder="0" min="0">
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-label">Freelance / Side hustle <span class="field-optional">opsional</span></div>
+          <div class="input-wrap">
+            <span class="rp-tag">Rp</span>
+            <input class="money-field" id="f_side" type="number" inputmode="numeric" placeholder="0" min="0">
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-label">Kiriman orang tua / Beasiswa <span class="field-optional">opsional</span></div>
+          <div class="input-wrap">
+            <span class="rp-tag">Rp</span>
+            <input class="money-field" id="f_other" type="number" inputmode="numeric" placeholder="0" min="0">
+          </div>
+        </div>
+
+        <div class="live-total" style="background:#FEF3C7;border:1.5px solid #FDE68A">
+          <div>
+            <div class="live-label" style="color:#92400E">Total pemasukan</div>
+            <div class="live-value" style="color:#78350F" id="t_inc">Rp 0</div>
+          </div>
+          <span style="font-size:28px">📈</span>
+        </div>
+      </div>
+      <div class="nav-bottom">
+        <button class="btn-next" style="flex:1" onclick="goNext(0)">
+          Lanjut
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 1: Pengeluaran Tetap -->
+    <div class="screen" id="sc1">
+      <div class="screen-body">
+        <div class="screen-icon" style="background:#FEE2E2">🏠</div>
+        <h2 class="screen-heading">Pengeluaran tetap</h2>
+        <p class="screen-sub">Biaya yang selalu ada setiap bulan dan jumlahnya relatif sama.</p>
+
+        <div class="field">
+          <div class="field-label">Kos / Kontrakan</div>
+          <div class="input-wrap"><span class="rp-tag">Rp</span>
+            <input class="money-field" id="f_kos" type="number" inputmode="numeric" placeholder="0" min="0"></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Cicilan (HP, motor, dll)</div>
+          <div class="input-wrap"><span class="rp-tag">Rp</span>
+            <input class="money-field" id="f_cicil" type="number" inputmode="numeric" placeholder="0" min="0"></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Paylater aktif (total tagihan/bln)</div>
+          <div class="input-wrap"><span class="rp-tag">Rp</span>
+            <input class="money-field" id="f_pay" type="number" inputmode="numeric" placeholder="0" min="0"></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Langganan digital <span class="field-optional">Spotify, Netflix, dll</span></div>
+          <div class="input-wrap"><span class="rp-tag">Rp</span>
+            <input class="money-field" id="f_sub" type="number" inputmode="numeric" placeholder="0" min="0"></div>
+        </div>
+
+        <div class="live-total" style="background:#FEE2E2;border:1.5px solid #FECACA">
+          <div>
+            <div class="live-label" style="color:#991B1B">Total pengeluaran tetap</div>
+            <div class="live-value" style="color:#7F1D1D" id="t_fix">Rp 0</div>
+          </div>
+          <span style="font-size:28px">📤</span>
+        </div>
+      </div>
+      <div class="nav-bottom">
+        <button class="btn-back" onclick="goPrev(1)">← Kembali</button>
+        <button class="btn-next" onclick="goNext(1)">
+          Lanjut
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: Pengeluaran Variabel -->
+    <div class="screen" id="sc2">
+      <div class="screen-body">
+        <div class="screen-icon" style="background:#EDE9FE">🛍️</div>
+        <h2 class="screen-heading">Pengeluaran variabel</h2>
+        <p class="screen-sub">Estimasi rata-rata pengeluaran harian/mingguan yang diubah ke per bulan.</p>
+
+        <div class="field">
+          <div class="field-label">Makan & minum</div>
+          <div class="input-wrap"><span class="rp-tag">Rp</span>
+            <input class="money-field" id="f_makan" type="number" inputmode="numeric" placeholder="0" min="0"></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Transportasi</div>
+          <div class="input-wrap"><span class="rp-tag">Rp</span>
+            <input class="money-field" id="f_trans" type="number" inputmode="numeric" placeholder="0" min="0"></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Hiburan & nongkrong</div>
+          <div class="input-wrap"><span class="rp-tag">Rp</span>
+            <input class="money-field" id="f_hibur" type="number" inputmode="numeric" placeholder="0" min="0"></div>
+        </div>
+        <div class="field">
+          <div class="field-label">Belanja & kebutuhan lain</div>
+          <div class="input-wrap"><span class="rp-tag">Rp</span>
+            <input class="money-field" id="f_lain" type="number" inputmode="numeric" placeholder="0" min="0"></div>
+        </div>
+
+        <div class="live-total" style="background:#EDE9FE;border:1.5px solid #DDD6FE">
+          <div>
+            <div class="live-label" style="color:#5B21B6">Total pengeluaran variabel</div>
+            <div class="live-value" style="color:#4C1D95" id="t_var">Rp 0</div>
+          </div>
+          <span style="font-size:28px">🛒</span>
+        </div>
+      </div>
+      <div class="nav-bottom">
+        <button class="btn-back" onclick="goPrev(2)">← Kembali</button>
+        <button class="btn-next" onclick="goNext(2)">
+          Lanjut
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: Kebiasaan -->
+    <div class="screen" id="sc3">
+      <div class="screen-body">
+        <div class="screen-icon" style="background:#DCFCE7">🧭</div>
+        <h2 class="screen-heading">Kebiasaan & kondisi</h2>
+        <p class="screen-sub">Pilih yang paling jujur menggambarkan situasimu sekarang.</p>
+
+        <p class="section-divider">Seberapa sering kamu menabung?</p>
+        <div class="choice-grid" id="cgSave">
+          <div class="choice-card" data-g="save" data-v="never" onclick="pickChoice(this)">
+            <div class="choice-emoji">😰</div>
+            <div class="choice-text">Tidak pernah</div>
+          </div>
+          <div class="choice-card" data-g="save" data-v="rare" onclick="pickChoice(this)">
+            <div class="choice-emoji">😅</div>
+            <div class="choice-text">Jarang sekali</div>
+          </div>
+          <div class="choice-card" data-g="save" data-v="sometimes" onclick="pickChoice(this)">
+            <div class="choice-emoji">😐</div>
+            <div class="choice-text">Kadang-kadang</div>
+          </div>
+          <div class="choice-card" data-g="save" data-v="always" onclick="pickChoice(this)">
+            <div class="choice-emoji">😊</div>
+            <div class="choice-text">Rutin tiap bulan</div>
+          </div>
+        </div>
+
+        <p class="section-divider">Dana darurat?</p>
+        <div class="choice-grid" id="cgEmg">
+          <div class="choice-card" data-g="emg" data-v="none" onclick="pickChoice(this)">
+            <div class="choice-emoji">🚫</div>
+            <div class="choice-text">Belum ada</div>
+          </div>
+          <div class="choice-card" data-g="emg" data-v="small" onclick="pickChoice(this)">
+            <div class="choice-emoji">💧</div>
+            <div class="choice-text">Ada, tapi kecil</div>
+          </div>
+          <div class="choice-card" data-g="emg" data-v="one" onclick="pickChoice(this)">
+            <div class="choice-emoji">💰</div>
+            <div class="choice-text">1–2 bulan</div>
+          </div>
+          <div class="choice-card" data-g="emg" data-v="three" onclick="pickChoice(this)">
+            <div class="choice-emoji">🏦</div>
+            <div class="choice-text">3+ bulan</div>
+          </div>
+        </div>
+
+        <p class="section-divider">Yang paling kamu khawatirkan</p>
+        <div class="worry-list" id="wList">
+          <div class="worry-item" data-v="bokek" onclick="pickWorry(this)">
+            <div class="worry-radio"></div>
+            <span class="worry-text">Sering bokek sebelum akhir bulan</span>
+          </div>
+          <div class="worry-item" data-v="utang" onclick="pickWorry(this)">
+            <div class="worry-radio"></div>
+            <span class="worry-text">Utang atau cicilan yang menumpuk</span>
+          </div>
+          <div class="worry-item" data-v="future" onclick="pickWorry(this)">
+            <div class="worry-radio"></div>
+            <span class="worry-text">Tidak punya rencana keuangan masa depan</span>
+          </div>
+          <div class="worry-item" data-v="fomo" onclick="pickWorry(this)">
+            <div class="worry-radio"></div>
+            <span class="worry-text">Sering FOMO dan belanja impulsif</span>
+          </div>
+          <div class="worry-item" data-v="invest" onclick="pickWorry(this)">
+            <div class="worry-radio"></div>
+            <span class="worry-text">Ingin mulai investasi tapi bingung caranya</span>
+          </div>
+          <div class="worry-item" data-v="income" onclick="pickWorry(this)">
+            <div class="worry-radio"></div>
+            <span class="worry-text">Penghasilan yang tidak cukup atau tidak stabil</span>
+          </div>
+        </div>
+      </div>
+      <div class="nav-bottom">
+        <button class="btn-back" onclick="goPrev(3)">← Kembali</button>
+        <button class="btn-next" onclick="goNext(3)">
+          Lihat hasil
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: Hasil -->
+    <div class="screen" id="sc4">
+      <div id="resultArea"></div>
+      <div class="nav-bottom" style="gap:10px">
+        <button class="btn-back" onclick="goPrev(4)">← Edit</button>
+        <button class="btn-next" style="font-size:14px" onclick="shareResult()">
+          Simpan hasil
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 17H5a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3M13 21l8-8-8-8v5H9v6h4v5z"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /screens -->
+</div><!-- /app-shell -->
+
+<script>
+const STEPS = ['Pemasukan','Pengeluaran tetap','Pengeluaran var.','Kebiasaan','Hasil'];
+const LABELS = ['Langkah 1 dari 5','Langkah 2 dari 5','Langkah 3 dari 5','Langkah 4 dari 5','Hasil Pemetaan'];
+
+let cur = 0;
+const state = { save:'', emg:'', worry:'' };
+
+function startApp(){
+  document.getElementById('splash').style.display = 'none';
+  document.getElementById('appShell').style.display = 'flex';
+  document.getElementById('appShell').style.flexDirection = 'column';
+  document.getElementById('appShell').style.minHeight = '100vh';
+  bindLiveUpdates();
+}
+
+function bindLiveUpdates(){
+  ['f_main','f_side','f_other'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      document.getElementById('t_inc').textContent = fmtFull(getInc());
+    });
+  });
+  ['f_kos','f_cicil','f_pay','f_sub'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      document.getElementById('t_fix').textContent = fmtFull(getFix());
+    });
+  });
+  ['f_makan','f_trans','f_hibur','f_lain'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      document.getElementById('t_var').textContent = fmtFull(getVar());
+    });
+  });
+}
+
+function n(id){ return parseFloat(document.getElementById(id).value) || 0; }
+function getInc(){ return n('f_main') + n('f_side') + n('f_other'); }
+function getFix(){ return n('f_kos') + n('f_cicil') + n('f_pay') + n('f_sub'); }
+function getVar(){ return n('f_makan') + n('f_trans') + n('f_hibur') + n('f_lain'); }
+
+function fmt(v){
+  v = Math.round(v);
+  if(v >= 1000000) return 'Rp '+(v/1000000).toFixed(1).replace(/\.0$/,'')+'jt';
+  if(v >= 1000) return 'Rp '+(v/1000).toFixed(0)+'rb';
+  return 'Rp '+v.toLocaleString('id-ID');
+}
+function fmtFull(v){
+  return 'Rp '+Math.round(v).toLocaleString('id-ID');
+}
+function pct(a,b){ return b > 0 ? Math.round((a/b)*100) : 0; }
+
+function goNext(from){
+  if(from === 4) return;
+  const to = from + 1;
+  if(to === 4) buildResult();
+  animTransition(from, to, 'forward');
+}
+function goPrev(from){
+  if(from === 0) return;
+  animTransition(from, from-1, 'back');
+}
+
+function animTransition(from, to, dir){
+  const scFrom = document.getElementById('sc'+from);
+  const scTo   = document.getElementById('sc'+to);
+  scFrom.classList.remove('active');
+  scFrom.classList.add(dir === 'forward' ? 'exit-left' : '');
+  scTo.style.transform = dir === 'forward' ? 'translateX(30px)' : 'translateX(-30px)';
+  scTo.style.opacity = '0';
+  scTo.classList.add('active');
+  requestAnimationFrame(() => {
+    scTo.style.transition = 'opacity .28s ease, transform .28s ease';
+    scTo.style.transform = 'translateX(0)';
+    scTo.style.opacity = '1';
+  });
+  setTimeout(() => {
+    scFrom.style.transform = '';
+    scFrom.style.opacity = '';
+    scFrom.classList.remove('exit-left');
+  }, 300);
+  cur = to;
+  updateHeader(to);
+  window.scrollTo(0,0);
+}
+
+function updateHeader(step){
+  for(let i=0;i<5;i++){
+    const d = document.getElementById('ps'+i);
+    d.className = 'p-seg';
+    if(i < step) d.classList.add('done');
+    else if(i === step) d.classList.add('active');
+  }
+  document.getElementById('stepLabel').textContent = LABELS[step];
+  document.getElementById('stepCounter').textContent = STEPS[step];
+}
+
+function pickChoice(el){
+  const g = el.dataset.g;
+  document.querySelectorAll('.choice-card[data-g="'+g+'"]').forEach(c => c.classList.remove('picked'));
+  el.classList.add('picked');
+  state[g] = el.dataset.v;
+}
+
+function pickWorry(el){
+  document.querySelectorAll('.worry-item').forEach(c => c.classList.remove('picked'));
+  el.classList.add('picked');
+  state.worry = el.dataset.v;
+}
+
+function buildResult(){
+  const inc  = getInc();
+  const fix  = getFix();
+  const varr = getVar();
+  const out  = fix + varr;
+  const sisa = inc - out;
+  const rasio   = pct(out, inc);
+  const debtR   = pct(n('f_cicil') + n('f_pay'), inc);
+  const savePct = inc > 0 ? Math.max(0, Math.round((sisa/inc)*100)) : 0;
+
+  let tipeKey, tipeLabel, tipeEmoji, tipeBg, tipeTxtCol, badgeBg, badgeTxt;
+  if(sisa < 0 || rasio > 90 || debtR > 40){
+    tipeKey='red'; tipeLabel='Di Bawah Tekanan'; tipeEmoji='🔴';
+    tipeBg='#DC2626'; tipeTxtCol='#fff';
+    badgeBg='rgba(255,255,255,.2)'; badgeTxt='#fff';
+  } else if(state.save==='never'||state.save==='rare'||state.emg==='none'||sisa<inc*.1){
+    tipeKey='yellow'; tipeLabel='Aman tapi Stagnan'; tipeEmoji='🟡';
+    tipeBg='#D97706'; tipeTxtCol='#fff';
+    badgeBg='rgba(255,255,255,.2)'; badgeTxt='#fff';
+  } else {
+    tipeKey='green'; tipeLabel='Sedang Bertumbuh'; tipeEmoji='🟢';
+    tipeBg='#16A34A'; tipeTxtCol='#fff';
+    badgeBg='rgba(255,255,255,.2)'; badgeTxt='#fff';
+  }
+
+  const barColor = rasio>90?'#DC2626':rasio>70?'#D97706':'#16A34A';
+  const sisaColor = sisa>=0?'#16A34A':'#DC2626';
+
+  const worryMap = {
+    bokek:'Sering bokek sebelum akhir bulan',
+    utang:'Utang/cicilan menumpuk',
+    future:'Belum punya rencana keuangan',
+    fomo:'Belanja impulsif & FOMO',
+    invest:'Ingin mulai investasi',
+    income:'Penghasilan tidak cukup/stabil'
+  };
+
+  const actions = buildActions(tipeKey, sisa, inc, out, debtR, fix, varr);
+
+  document.getElementById('resultArea').innerHTML = `
+    <div class="result-hero" style="background:${tipeBg}">
+      <div class="result-emoji">${tipeEmoji}</div>
+      <div class="result-tipe-badge" style="background:${badgeBg};color:${badgeTxt}">Tipe ${tipeLabel}</div>
+      <div class="result-title">Ini kondisi keuanganmu</div>
+      <div class="result-desc">${tipeDesc(tipeKey, rasio, debtR)}</div>
+    </div>
+
+    <div class="result-body anim-in">
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" style="color:${sisaColor}">${fmt(Math.abs(sisa))}</div>
+          <div class="stat-desc">${sisa>=0?'Sisa / bisa ditabung':'Defisit per bulan'}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" style="color:${barColor}">${rasio}%</div>
+          <div class="stat-desc">Dari pemasukan digunakan</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" style="color:${debtR>30?'#DC2626':'#6B7280'}">${debtR}%</div>
+          <div class="stat-desc">Rasio utang & cicilan</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" style="color:${savePct>20?'#16A34A':savePct>10?'#D97706':'#DC2626'}">${savePct}%</div>
+          <div class="stat-desc">Potensi tabungan</div>
+        </div>
+      </div>
+
+      <div class="cashflow-section">
+        <div class="cashflow-title">Rasio pengeluaran</div>
+        <div class="bar-row">
+          <div class="bar-row-top">
+            <span class="bar-label">Pengeluaran vs Pemasukan</span>
+            <span class="bar-amount" style="color:${barColor}">${Math.min(rasio,100)}%</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:${Math.min(rasio,100)}%;background:${barColor}"></div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-row-top">
+            <span class="bar-label">Cicilan & paylater</span>
+            <span class="bar-amount" style="color:${debtR>30?'#DC2626':'#6B7280'}">${debtR}%</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:${Math.min(debtR,100)}%;background:${debtR>30?'#DC2626':'#6B7280'}"></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:var(--text-muted)">
+          Ideal: pengeluaran ≤80% • utang ≤30% dari pemasukan
+        </div>
+      </div>
+
+      <div class="cashflow-section">
+        <div class="cashflow-title">Rincian cashflow bulanan</div>
+        <div class="cashflow-rows">
+          ${cfRow('💵','#FEF3C7','#92400E','Total pemasukan','Semua sumber',fmtFull(inc),'#16A34A')}
+          ${cfRow('🏠','#FEE2E2','#991B1B','Pengeluaran tetap','Kos, cicilan, langganan',fmtFull(fix),'#DC2626')}
+          ${cfRow('🛒','#EDE9FE','#5B21B6','Pengeluaran variabel','Makan, trans, hiburan',fmtFull(varr),'#7C3AED')}
+          ${cfRow('📊','#F1F5F9','#374151','Total keluar',fix>0||varr>0?'Tetap + variabel':'',fmtFull(out),'#374151')}
+          ${cfRow(sisa>=0?'💰':'⚠️',sisa>=0?'#DCFCE7':'#FEE2E2',sisa>=0?'#14532D':'#7F1D1D',sisa>=0?'Sisa / surplus':'Defisit','Pemasukan − Total keluar',fmtFull(sisa),sisaColor)}
+        </div>
+      </div>
+
+      ${state.worry ? `<div style="background:#F8F9FA;border-radius:12px;padding:12px 14px;margin-bottom:16px;border:1px solid var(--border);font-size:13px;color:var(--text-muted)">
+        Kamu khawatir tentang: <strong style="color:var(--text)">${worryMap[state.worry]||''}</strong>
+      </div>` : ''}
+
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px">
+        Langkah yang disarankan
+      </div>
+      ${actions.map((a,i)=>`
+        <div class="insight-card" style="background:${a.bg};border-left-color:${a.col}">
+          <div class="insight-num" style="background:${a.col}">${i+1}</div>
+          <div class="insight-body">
+            <div class="insight-title" style="color:${a.titleCol}">${a.title}</div>
+            <div class="insight-text" style="color:${a.textCol}">${a.text}</div>
+          </div>
+        </div>`).join('')}
+
+      <button class="restart-btn" onclick="restartApp()">
+        🔄 Mulai ulang asesmen
+      </button>
+    </div>
+  `;
+
+  setTimeout(()=>{
+    document.querySelectorAll('.bar-fill').forEach(b=>{
+      const w = b.style.width; b.style.width='0';
+      requestAnimationFrame(()=>{ b.style.width=w; });
+    });
+  }, 100);
+}
+
+function cfRow(emoji, iconBg, iconCol, name, sub, amount, amtCol){
+  return `<div class="cf-row">
+    <div class="cf-icon-wrap" style="background:${iconBg}"><span>${emoji}</span></div>
+    <div class="cf-info">
+      <div class="cf-name">${name}</div>
+      ${sub ? `<div class="cf-sub">${sub}</div>` : ''}
+    </div>
+    <div class="cf-amount" style="color:${amtCol}">${amount}</div>
+  </div>`;
+}
+
+function tipeDesc(k, rasio, debtR){
+  if(k==='red') return 'Pengeluaranmu melebihi atau hampir sama dengan pemasukan. Ini perlu segera diperbaiki — tapi bisa, dan dimulai dari langkah kecil.';
+  if(k==='yellow') return 'Cashflow-mu cukup seimbang, tapi belum ada pertumbuhan finansial yang nyata. Satu perubahan kecil bisa menggeser kondisimu ke zona hijau.';
+  return 'Kondisi keuanganmu sehat! Pengeluaran terkontrol dan ada ruang untuk menabung dan berinvestasi. Saatnya optimalkan lebih jauh.';
+}
+
+function buildActions(key, sisa, inc, out, debtR, fix, varr){
+  const acts = [];
+  const colors = [
+    {col:'#DC2626',bg:'#FEF2F2',titleCol:'#7F1D1D',textCol:'#991B1B'},
+    {col:'#D97706',bg:'#FFFBEB',titleCol:'#78350F',textCol:'#92400E'},
+    {col:'#8B0000',bg:'#FDF0F0',titleCol:'#4A0000',textCol:'#7F1D1D'},
+    {col:'#16A34A',bg:'#F0FDF4',titleCol:'#14532D',textCol:'#166534'},
+    {col:'#2563EB',bg:'#EFF6FF',titleCol:'#1E3A8A',textCol:'#1E40AF'},
+  ];
+  if(sisa < 0){
+    acts.push({...colors[0],title:'Prioritas: hentikan defisit',text:`Kamu defisit ${fmt(Math.abs(sisa))}/bln. Identifikasi 1 kategori pengeluaran yang bisa dipotong 20% bulan ini — mulai dari hiburan atau langganan yang jarang dipakai.`});
+    acts.push({...colors[2],title:'Stop tambah utang baru',text:'Jangan buka cicilan atau paylater baru. Fokus lunasi yang ada, mulai dari yang bunga atau biayanya paling tinggi.'});
+  } else if(sisa < inc * 0.1){
+    acts.push({...colors[1],title:'Terapkan metode Pay Yourself First',text:`Sisihkan ${fmt(sisa*0.5)} — setengah dari sisa — segera setelah terima penghasilan. Transfer ke rekening terpisah sebelum belanja apapun.`});
+  } else {
+    acts.push({...colors[3],title:'Otomatiskan tabungan',text:`Transfer ${fmt(sisa*0.5)} ke rekening tabungan terpisah di hari yang sama saat terima penghasilan. Jangan tunggu sisa — sisakan dulu, belanja setelahnya.`});
+  }
+  if(debtR > 30){
+    acts.push({...colors[0],title:`Kurangi rasio utang (sekarang ${debtR}%)`,text:'Rasio amannya di bawah 30%. Gunakan metode avalanche: lunasi cicilan dengan bunga tertinggi dulu sambil tetap bayar minimum yang lain.'});
+  }
+  if(state.emg==='none'||state.emg==='small'){
+    const target = fmt((fix+varr)*3);
+    acts.push({...colors[4],title:'Bangun dana darurat',text:`Target minimal 3× pengeluaran bulanan (sekitar ${target}). Dana darurat harus ada sebelum mulai investasi apapun — ini jaring pengaman hidupmu.`});
+  }
+  if(state.save==='never'||state.save==='rare'){
+    acts.push({...colors[1],title:'Mulai investasi dari Rp50.000',text:'Buka reksa dana pasar uang di Bibit, Bareksa, atau BukaReksa. Modal awal Rp10.000–50.000 sudah cukup. Yang penting konsisten dulu, besar kemudian.'});
+  }
+  if(state.worry==='invest'){
+    acts.push({...colors[4],title:'Mulai dengan reksa dana pasar uang',text:'Paling aman untuk pemula — risiko rendah, bisa dicairkan kapan saja, return lebih tinggi dari tabungan biasa. Buka akun di Bibit atau Bareksa.'});
+  }
+  if(state.worry==='income'||state.worry==='future'){
+    acts.push({...colors[3],title:'Monetisasi satu skill yang kamu punya',text:'Identifikasi 1 kemampuan yang bisa ditawarkan ke orang lain. Mulai dari lingkaran terdekat — teman, dosen, UMKM sekitar kampus. Bahkan Rp50rb pertama sudah mengubah mindset.'});
+  }
+  if(acts.length < 3){
+    acts.push({...colors[3],title:'Diversifikasi penghasilan',text:'Kondisimu sudah baik — langkah selanjutnya adalah membangun sumber penghasilan kedua. Monetisasi skill, buat produk digital kecil, atau mulai freelance di bidang yang kamu kuasai.'});
+  }
+  return acts.slice(0,4);
+}
+
+function restartApp(){
+  ['f_main','f_side','f_other','f_kos','f_cicil','f_pay','f_sub','f_makan','f_trans','f_hibur','f_lain'].forEach(id=>{
+    document.getElementById(id).value='';
+  });
+  document.getElementById('t_inc').textContent='Rp 0';
+  document.getElementById('t_fix').textContent='Rp 0';
+  document.getElementById('t_var').textContent='Rp 0';
+  document.querySelectorAll('.choice-card').forEach(c=>c.classList.remove('picked'));
+  document.querySelectorAll('.worry-item').forEach(c=>c.classList.remove('picked'));
+  state.save=''; state.emg=''; state.worry='';
+  animTransition(4, 0, 'back');
+}
+
+function shareResult(){
+  const inc=getInc(), out=getFix()+getVar(), sisa=inc-out;
+  const msg = `[LONTARA 2026 - Financial Mapping]\nPemasukan: ${fmtFull(inc)}\nTotal keluar: ${fmtFull(out)}\nSisa: ${fmtFull(sisa)}\nRasio: ${pct(out,inc)}%`;
+  if(navigator.share){
+    navigator.share({title:'Financial Mapping LONTARA 2026', text:msg});
+  } else if(navigator.clipboard){
+    navigator.clipboard.writeText(msg).then(()=>alert('Hasil disalin ke clipboard!'));
+  } else {
+    alert(msg);
+  }
+}
+</script>
+</body>
+</html>
