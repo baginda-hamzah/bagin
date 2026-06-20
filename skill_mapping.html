@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1A1A2E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Skill Capital Mapping — LONTARA 2026</title>
+<style>
+:root {
+  --dark: #1A1A2E;
+  --gold: #F39C12;
+  --gold-lt: #FEF9E7;
+  --white: #FFFFFF;
+  --surface: #F4F5F7;
+  --border: #E4E6EA;
+  --text: #1A1A2E;
+  --muted: #6B7280;
+  --hint: #A0A6B0;
+  --blue: #2563EB;
+  --purple: #7C3AED;
+  --teal: #0D9488;
+  --green: #16A34A;
+  --red: #DC2626;
+  --pad: 20px;
+  --st: env(safe-area-inset-top, 0px);
+  --sb: env(safe-area-inset-bottom, 0px);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html { height: 100%; }
+
+body {
+  width: 100%;
+  min-height: 100%;
+  background: #D8DAE0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  justify-content: center;
+}
+
+/* ───── SHELL ───── */
+.shell {
+  width: 100%;
+  max-width: 420px;
+  min-height: 100vh;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* ───── SPLASH ───── */
+#splash {
+  min-height: 100vh;
+  background: var(--dark);
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--st) + 48px) var(--pad) calc(var(--sb) + 36px);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.sp-glow {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  background: rgba(243,156,18,.06);
+}
+.sp-tag {
+  font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--gold); font-weight: 700; margin-bottom: 24px;
+}
+.sp-icon { font-size: 48px; margin-bottom: 20px; line-height: 1; }
+.sp-title {
+  font-size: 32px; font-weight: 800; line-height: 1.15; margin-bottom: 12px;
+}
+.sp-title em { color: var(--gold); font-style: normal; }
+.sp-sub {
+  font-size: 15px; color: rgba(255,255,255,.6); line-height: 1.65;
+  margin-bottom: 36px; max-width: 320px;
+}
+.sp-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; flex: 1; }
+.sp-card {
+  display: flex; align-items: center; gap: 16px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px; padding: 16px 18px;
+}
+.sp-card-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+.sp-card-name { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+.sp-card-desc { font-size: 12px; color: rgba(255,255,255,.5); line-height: 1.4; }
+.btn-start {
+  width: 100%; padding: 18px;
+  background: var(--gold); border: none; border-radius: 16px;
+  font-size: 17px; font-weight: 800; color: #fff;
+  cursor: pointer; font-family: inherit; letter-spacing: .3px;
+  transition: transform .15s, background .15s;
+}
+.btn-start:active { transform: scale(.98); background: #D68900; }
+.sp-credit {
+  text-align: center; font-size: 11px;
+  color: rgba(255,255,255,.3); margin-top: 18px; line-height: 1.5;
+}
+
+/* ───── STICKY HEADER ───── */
+.hdr {
+  background: var(--dark); color: #fff;
+  padding: calc(var(--st) + 16px) var(--pad) 0;
+  position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+}
+.hdr-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.hdr-badge {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(255,255,255,.1);
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.hdr-txt { flex: 1; }
+.hdr-brand { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,.45); margin-bottom: 1px; }
+.hdr-name { font-size: 16px; font-weight: 700; }
+.prog {
+  display: flex; gap: 5px;
+  padding: 0 0 16px;
+}
+.pg { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,.18); transition: background .3s; }
+.pg.done { background: rgba(255,255,255,.5); }
+.pg.on { background: var(--gold); }
+.hdr-info {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 0 14px; font-size: 12px;
+}
+.hdr-info-lbl { color: rgba(255,255,255,.65); }
+.hdr-info-step { color: rgba(255,255,255,.35); }
+
+/* ───── SCREENS ───── */
+.screens { flex: 1; position: relative; }
+.scr {
+  position: absolute; inset: 0;
+  opacity: 0; pointer-events: none;
+  transform: translateX(28px);
+  transition: opacity .25s ease, transform .25s ease;
+  min-height: 100%;
+}
+.scr.on {
+  position: relative;
+  opacity: 1; pointer-events: auto; transform: none;
+}
+.scr.bye { transform: translateX(-28px); opacity: 0; }
+.sbody { padding: 28px var(--pad) 140px; }
+
+/* ───── SCREEN HEADER ───── */
+.s-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; margin-bottom: 20px;
+}
+.s-h { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 8px; line-height: 1.2; }
+.s-p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+
+/* ───── FIELD ───── */
+.field { margin-bottom: 20px; }
+.f-lbl {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;
+}
+.f-lbl-opt { font-size: 11px; font-weight: 400; color: var(--hint); }
+.textarea {
+  width: 100%; padding: 14px 16px;
+  font-size: 15px; border: 1.5px solid var(--border);
+  border-radius: 14px; background: var(--surface);
+  color: var(--text); outline: none; font-family: inherit;
+  resize: none; transition: border-color .2s, box-shadow .2s; line-height: 1.5;
+}
+.textarea:focus {
+  border-color: var(--dark); background: #fff;
+  box-shadow: 0 0 0 3px rgba(26,26,46,.08);
+}
+.char-c { font-size: 11px; color: var(--hint); text-align: right; margin-top: 5px; }
+
+/* ───── DIVIDER LABEL ───── */
+.div-lbl {
+  font-size: 11px; font-weight: 700; letter-spacing: .9px;
+  text-transform: uppercase; color: var(--hint);
+  margin: 24px 0 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.div-lbl::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ───── CHOICE GRID ───── */
+.cg {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px; margin-bottom: 20px;
+}
+.ci {
+  border: 1.5px solid var(--border); border-radius: 16px;
+  padding: 16px 12px; text-align: center; cursor: pointer;
+  background: var(--surface);
+  transition: border-color .18s, background .18s, transform .12s;
+  -webkit-user-select: none;
+}
+.ci:active { transform: scale(.97); }
+.ci.sel { border-color: var(--dark); background: var(--dark); }
+.ci-emoji { font-size: 26px; margin-bottom: 8px; line-height: 1; }
+.ci-lbl { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1.35; }
+.ci.sel .ci-lbl { color: #fff; }
+/* Full-width variant */
+.ci.wide {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; gap: 14px;
+  text-align: left; padding: 14px 18px;
+}
+.ci.wide .ci-emoji { font-size: 22px; margin-bottom: 0; }
+.ci.wide .ci-lbl { font-size: 13px; }
+
+/* ───── CHIPS ───── */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.chip {
+  padding: 9px 16px;
+  border: 1.5px solid var(--border); border-radius: 40px;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; background: var(--surface); color: var(--text);
+  transition: all .18s; -webkit-user-select: none;
+  white-space: nowrap;
+}
+.chip:active { transform: scale(.96); }
+.chip.sel { color: #fff; border-color: transparent; }
+
+/* ───── RADIO CARD ───── */
+.rcards { display: flex; flex-direction: column; gap: 10px; }
+.rc {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px; border: 1.5px solid var(--border);
+  border-radius: 16px; cursor: pointer; background: var(--surface);
+  transition: all .18s;
+}
+.rc:active { transform: scale(.99); }
+.rc.sel { border-color: var(--dark); background: #fff; }
+.rc-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--border); flex-shrink: 0; margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .18s;
+}
+.rc.sel .rc-dot { border-color: var(--dark); background: var(--dark); }
+.rc-dot::after {
+  content: ''; width: 7px; height: 7px; border-radius: 50%;
+  background: #fff; opacity: 0; transition: opacity .15s;
+}
+.rc.sel .rc-dot::after { opacity: 1; }
+.rc-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; line-height: 1.3; }
+.rc-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ───── SLIDER ───── */
+.sl-val {
+  font-size: 26px; font-weight: 800; color: var(--dark);
+  text-align: center; margin-bottom: 10px;
+}
+input[type=range] {
+  width: 100%; height: 6px; border-radius: 3px;
+  appearance: none; -webkit-appearance: none;
+  background: var(--border); outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  appearance: none; -webkit-appearance: none;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--dark); border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+input[type=range]::-moz-range-thumb {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--dark); border: 3px solid #fff;
+}
+.sl-labels {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--hint); margin-top: 8px;
+}
+
+/* ───── NAV BOTTOM ───── */
+.nav {
+  position: fixed; bottom: 0;
+  left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 420px;
+  padding: 14px var(--pad) calc(var(--sb) + 14px);
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  display: flex; gap: 10px; z-index: 200;
+}
+.btn-bk {
+  flex: 1; padding: 15px;
+  border: 1.5px solid var(--border); border-radius: 14px;
+  background: transparent; font-size: 15px; font-weight: 600;
+  color: var(--muted); cursor: pointer; font-family: inherit;
+  transition: background .15s;
+}
+.btn-bk:active { background: var(--surface); }
+.btn-nx {
+  flex: 2; padding: 15px;
+  border: none; border-radius: 14px; background: var(--dark);
+  font-size: 15px; font-weight: 700; color: #fff;
+  cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  transition: background .15s, transform .12s;
+}
+.btn-nx:active { background: #0D1020; transform: scale(.98); }
+.btn-nx svg { width: 18px; height: 18px; }
+
+/* ───── RESULT HERO ───── */
+.res-hero {
+  padding: calc(var(--st) + 36px) var(--pad) 32px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.res-emoji { font-size: 64px; margin-bottom: 10px; line-height: 1; }
+.res-badge {
+  display: inline-block; padding: 6px 18px; border-radius: 20px;
+  font-size: 12px; font-weight: 700; margin-bottom: 12px;
+  background: rgba(255,255,255,.18); color: #fff;
+}
+.res-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+.res-sub { font-size: 13px; line-height: 1.65; opacity: .75; max-width: 300px; margin: 0 auto; }
+
+/* ───── RESULT BODY ───── */
+.res-body { padding: 24px var(--pad) 140px; }
+
+.sec-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
+
+/* Stats grid */
+.stats-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+.stat-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 16px 14px;
+}
+.stat-num { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.stat-lbl { font-size: 11px; color: var(--muted); line-height: 1.35; }
+
+/* Card base */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 18px; padding: 18px; margin-bottom: 14px;
+}
+
+/* Profile card */
+.prof-card { background: var(--dark); border-radius: 18px; padding: 18px; margin-bottom: 14px; }
+.prof-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.prof-av {
+  width: 50px; height: 50px; border-radius: 50%;
+  background: rgba(243,156,18,.2); border: 2px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+.prof-name { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 3px; }
+.prof-sub { font-size: 12px; color: rgba(255,255,255,.5); }
+.prof-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+.prof-tag {
+  padding: 5px 12px; background: rgba(255,255,255,.1);
+  border-radius: 20px; font-size: 11px; color: rgba(255,255,255,.8); font-weight: 600;
+}
+
+/* Meter bar */
+.m-row { margin-bottom: 14px; }
+.m-row:last-child { margin-bottom: 0; }
+.m-top { display: flex; justify-content: space-between; margin-bottom: 7px; }
+.m-lbl { font-size: 12px; color: var(--muted); }
+.m-val { font-size: 12px; font-weight: 700; }
+.m-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.m-fill { height: 100%; border-radius: 4px; transition: width .8s cubic-bezier(.4,0,.2,1); }
+
+/* Skill list rows */
+.sk-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.sk-row:last-child { border: none; padding-bottom: 0; }
+.sk-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+.sk-txt { font-size: 13px; color: var(--text); font-weight: 500; line-height: 1.4; flex: 1; }
+
+/* Opportunity card */
+.opp {
+  border-radius: 16px; padding: 16px; margin-bottom: 10px;
+  display: flex; gap: 14px; align-items: flex-start;
+  border-left: 4px solid;
+}
+.opp-n {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0; margin-top: 1px;
+}
+.opp-cat { font-size: 10px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; margin-bottom: 4px; }
+.opp-t { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+.opp-d { font-size: 12px; line-height: 1.6; }
+.opp-earn {
+  display: inline-block; margin-top: 8px; padding: 4px 12px;
+  border-radius: 20px; font-size: 11px; font-weight: 700; color: #fff;
+}
+
+/* Roadmap */
+.rm { display: flex; flex-direction: column; }
+.rm-item { display: flex; gap: 14px; padding-bottom: 22px; }
+.rm-item:last-child { padding-bottom: 0; }
+.rm-l { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.rm-c {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0;
+}
+.rm-line { flex: 1; width: 2px; background: var(--border); margin-top: 5px; }
+.rm-item:last-child .rm-line { display: none; }
+.rm-b { flex: 1; padding-top: 5px; }
+.rm-mo { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 4px; }
+.rm-ti { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.rm-de { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+/* Focus box */
+.focus-box {
+  background: #FFFBEB; border: 1.5px solid #FDE68A;
+  border-radius: 16px; padding: 18px; margin-bottom: 14px;
+}
+.focus-lbl { font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: #92400E; margin-bottom: 6px; }
+.focus-title { font-size: 16px; font-weight: 800; color: #78350F; margin-bottom: 8px; }
+.focus-desc { font-size: 13px; color: #92400E; line-height: 1.6; }
+
+.restart-btn {
+  width: 100%; padding: 16px; margin-top: 14px;
+  border: 1.5px solid var(--border); border-radius: 14px;
+  background: transparent; font-size: 14px; font-weight: 600;
+  color: var(--muted); cursor: pointer; font-family: inherit; transition: background .15s;
+}
+.restart-btn:active { background: var(--surface); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.anim { animation: fadeUp .4s ease both; }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash" class="shell">
+  <div class="sp-glow" style="width:320px;height:320px;top:-100px;right:-100px"></div>
+  <div class="sp-glow" style="width:200px;height:200px;bottom:120px;left:-70px"></div>
+  <p class="sp-tag">LONTARA 2026 · Money Mindset</p>
+  <div class="sp-icon">⚡</div>
+  <h1 class="sp-title">Skill Capital<br><em>Mapping</em></h1>
+  <p class="sp-sub">Temukan, petakan, dan monetisasi kemampuan terbaikmu. Aset terbesarmu bukan uang — tapi kapasitas dirimu.</p>
+  <div class="sp-cards">
+    <div class="sp-card">
+      <div class="sp-card-icon" style="background:rgba(37,99,235,.2)">💻</div>
+      <div><div class="sp-card-name">Hard Skills</div><div class="sp-card-desc">Kemampuan teknis yang terukur dan bisa dipelajari</div></div>
+    </div>
+    <div class="sp-card">
+      <div class="sp-card-icon" style="background:rgba(124,58,237,.2)">🤝</div>
+      <div><div class="sp-card-name">Soft Skills</div><div class="sp-card-desc">Kemampuan interpersonal dan komunikasi</div></div>
+    </div>
+    <div class="sp-card">
+      <div class="sp-card-icon" style="background:rgba(13,148,136,.2)">📚</div>
+      <div><div class="sp-card-name">Knowledge Capital</div><div class="sp-card-desc">Pengetahuan niche mendalam di bidang tertentu</div></div>
+    </div>
+    <div class="sp-card">
+      <div class="sp-card-icon" style="background:rgba(243,156,18,.2)">🌐</div>
+      <div><div class="sp-card-name">Network Capital</div><div class="sp-card-desc">Koneksi dan relasi yang bernilai</div></div>
+    </div>
+  </div>
+  <button class="btn-start" onclick="startApp()">Mulai Mapping Skill ⚡</button>
+  <p class="sp-credit">Baginda Hamzah, S.T., M.B.A<br>Universitas Hasanuddin</p>
+</div>
+
+<!-- APP -->
+<div class="shell" id="app" style="display:none">
+  <div class="hdr">
+    <div class="hdr-row">
+      <div class="hdr-badge">⚡</div>
+      <div class="hdr-txt">
+        <div class="hdr-brand">LONTARA 2026</div>
+        <div class="hdr-name">Skill Capital Mapping</div>
+      </div>
+    </div>
+    <div class="prog" id="progSegs">
+      <div class="pg on" id="pg0"></div><div class="pg" id="pg1"></div>
+      <div class="pg" id="pg2"></div><div class="pg" id="pg3"></div>
+      <div class="pg" id="pg4"></div><div class="pg" id="pg5"></div>
+    </div>
+    <div class="hdr-info">
+      <span class="hdr-info-lbl" id="stepLbl">Langkah 1 dari 6</span>
+      <span class="hdr-info-step" id="stepNum">Profil</span>
+    </div>
+  </div>
+
+  <div class="screens">
+
+    <!-- S0: Profil -->
+    <div class="scr on" id="s0"><div class="sbody">
+      <div class="s-icon" style="background:#FEF9E7">🧑‍🎓</div>
+      <h2 class="s-h">Siapa kamu?</h2>
+      <p class="s-p">Isi profil singkat agar hasil mapping lebih personal dan relevan untukmu.</p>
+      <div class="field">
+        <div class="f-lbl">Nama <span class="f-lbl-opt">wajib</span></div>
+        <textarea class="textarea" id="p_nama" rows="1" placeholder="Nama lengkap atau panggilan..." maxlength="50" oninput="cc(this,'cc_nama',50)"></textarea>
+        <div class="char-c" id="cc_nama">0 / 50</div>
+      </div>
+      <div class="field">
+        <div class="f-lbl">Jurusan / Program studi <span class="f-lbl-opt">opsional</span></div>
+        <textarea class="textarea" id="p_jurusan" rows="1" placeholder="Contoh: Teknik Informatika, Ilmu Komunikasi..." maxlength="60" oninput="cc(this,'cc_jur',60)"></textarea>
+        <div class="char-c" id="cc_jur">0 / 60</div>
+      </div>
+      <div class="div-lbl">Status pendidikan</div>
+      <div class="cg" id="sgSem">
+        <div class="ci" data-g="sem" data-v="1-2" onclick="pickCI(this)"><div class="ci-emoji">🌱</div><div class="ci-lbl">Semester 1–2</div></div>
+        <div class="ci" data-g="sem" data-v="3-4" onclick="pickCI(this)"><div class="ci-emoji">📖</div><div class="ci-lbl">Semester 3–4</div></div>
+        <div class="ci" data-g="sem" data-v="5-6" onclick="pickCI(this)"><div class="ci-emoji">🔬</div><div class="ci-lbl">Semester 5–6</div></div>
+        <div class="ci" data-g="sem" data-v="7+" onclick="pickCI(this)"><div class="ci-emoji">🎓</div><div class="ci-lbl">Semester 7+</div></div>
+        <div class="ci wide" data-g="sem" data-v="lulus" onclick="pickCI(this)"><div class="ci-emoji">🏆</div><div class="ci-lbl">Sudah Lulus / Fresh Graduate</div></div>
+      </div>
+      <div class="div-lbl">Tujuan mapping ini</div>
+      <div class="cg" id="sgGoal">
+        <div class="ci" data-g="goal" data-v="freelance" onclick="pickCI(this)"><div class="ci-emoji">💻</div><div class="ci-lbl">Mulai freelance</div></div>
+        <div class="ci" data-g="goal" data-v="sidehustle" onclick="pickCI(this)"><div class="ci-emoji">🚀</div><div class="ci-lbl">Bangun side hustle</div></div>
+        <div class="ci" data-g="goal" data-v="karir" onclick="pickCI(this)"><div class="ci-emoji">👔</div><div class="ci-lbl">Persiapan karir</div></div>
+        <div class="ci" data-g="goal" data-v="tau_diri" onclick="pickCI(this)"><div class="ci-emoji">🔍</div><div class="ci-lbl">Kenali diri lebih</div></div>
+      </div>
+    </div>
+    <div class="nav"><button class="btn-nx" style="flex:1" onclick="go(0,1)">Mulai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <!-- S1: Hard Skills -->
+    <div class="scr" id="s1"><div class="sbody">
+      <div class="s-icon" style="background:#EFF6FF">💻</div>
+      <h2 class="s-h">Hard skills-mu</h2>
+      <p class="s-p">Pilih kemampuan teknis yang kamu miliki — sesederhana apapun, jangan meremehkan diri sendiri.</p>
+      <div class="div-lbl">Kreasi digital</div>
+      <div class="chips">
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Desain grafis</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Edit video</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Fotografi</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Animasi / motion</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Podcast / audio</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Ilustrasi digital</div>
+      </div>
+      <div class="div-lbl">Teknologi & data</div>
+      <div class="chips">
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Coding / pemrograman</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Excel / spreadsheet</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Analisis data</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Website / Wordpress</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Social media ads</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">SEO / copywriting</div>
+      </div>
+      <div class="div-lbl">Konten & bahasa</div>
+      <div class="chips">
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Menulis / blogging</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Terjemahan</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Bahasa Inggris</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Bahasa asing lain</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Riset & laporan</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Proofreading</div>
+      </div>
+      <div class="div-lbl">Bisnis & keuangan</div>
+      <div class="chips">
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Akuntansi / pembukuan</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Marketing digital</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Presentasi / pitch</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Manajemen proyek</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Riset pasar</div>
+        <div class="chip" data-cat="hard" data-col="#2563EB" onclick="toggleChip(this)">Penjualan</div>
+      </div>
+      <div class="div-lbl">Skill lainnya</div>
+      <div class="field">
+        <textarea class="textarea" id="hard_custom" rows="2" placeholder="Skill lain yang tidak ada di atas... (misal: memasak, menjahit, olahraga, musik, dll)" maxlength="120" oninput="cc(this,'cc_hc',120)"></textarea>
+        <div class="char-c" id="cc_hc">0 / 120</div>
+      </div>
+    </div>
+    <div class="nav"><button class="btn-bk" onclick="go(1,0)">← Kembali</button><button class="btn-nx" onclick="go(1,2)">Lanjut <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <!-- S2: Soft Skills -->
+    <div class="scr" id="s2"><div class="sbody">
+      <div class="s-icon" style="background:#EDE9FE">🤝</div>
+      <h2 class="s-h">Soft skills-mu</h2>
+      <p class="s-p">Pilih kemampuan interpersonal yang orang-orang di sekitarmu sering akui dari kamu.</p>
+      <div class="div-lbl">Komunikasi & pengaruh</div>
+      <div class="chips">
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Public speaking</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Storytelling</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Negosiasi</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Persuasi</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Fasilitasi diskusi</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">MC / moderator</div>
+      </div>
+      <div class="div-lbl">Kepemimpinan & organisasi</div>
+      <div class="chips">
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Kepemimpinan tim</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Manajemen waktu</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Pemecahan masalah</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Berpikir kritis</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Koordinasi acara</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Delegasi tugas</div>
+      </div>
+      <div class="div-lbl">Relasi & empati</div>
+      <div class="chips">
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Mendengarkan aktif</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Empati & konseling</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Membangun relasi</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Kolaborasi tim</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Mengajar / mentoring</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Adaptif & fleksibel</div>
+      </div>
+      <div class="div-lbl">Kreativitas & inovasi</div>
+      <div class="chips">
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Berpikir kreatif</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Ideasi & brainstorm</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Design thinking</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Inovasi produk</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Belajar mandiri</div>
+        <div class="chip" data-cat="soft" data-col="#7C3AED" onclick="toggleChip(this)">Inisiatif tinggi</div>
+      </div>
+    </div>
+    <div class="nav"><button class="btn-bk" onclick="go(2,1)">← Kembali</button><button class="btn-nx" onclick="go(2,3)">Lanjut <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <!-- S3: Knowledge & Network -->
+    <div class="scr" id="s3"><div class="sbody">
+      <div class="s-icon" style="background:#CCFBF1">🧠</div>
+      <h2 class="s-h">Pengetahuan & jaringan</h2>
+      <p class="s-p">Bidang yang kamu pahami lebih dalam dari rata-rata orang, dan koneksi yang kamu miliki.</p>
+      <div class="div-lbl">Bidang pengetahuan niche</div>
+      <div class="chips">
+        <div class="chip" data-cat="know" data-col="#0D9488" onclick="toggleChip(this)">Hukum & regulasi</div>
+        <div class="chip" data-cat="know" data-col="#0D9488" onclick="toggleChip(this)">Keuangan & investasi</div>
+        <div class="chip" data-cat="know" data-col="#0D9488" onclick="toggleChip(this)">Kesehatan & gizi</div>
+        <div class="chip" data-cat="know" data-col="#0D9488" onclick="toggleChip(this)">Pertanian & pangan</div>
+        <div class="chip" data-cat="know" data-col="#0D9488" onclick="toggleChip(this)">Pendidikan & kurikulum</div>
+        <div class="chip" data-cat="know" data-col="#0D9488" onclick="toggleChip(this)">Psikologi</div>
+        <div class="chip" data-cat="know" data-col="#0D9488" onclick="toggleChip(this)">Kuliner & F&B</div>
+        <div class="chip" data-cat="know" data-col="#0D9488" onclick="toggleChip(this)">Olahraga & fitness</div>
+        <div class="chip" data-cat="know" data-col="#0D9488" onclick="toggleChip(this)">Lingkungan & alam</div>
+        <div class="chip" data-cat="know" data-col="#0D9488" onclick="toggleChip(this)">Pariwisata & budaya</div>
+        <div class="chip" data-cat="know" data-col="#0D9488" onclick="toggleChip(this)">Fashion & kecantikan</div>
+        <div class="chip" data-cat="know" data-col="#0D9488" onclick="toggleChip(this)">Seni & musik</div>
+      </div>
+      <div class="div-lbl">Jaringan yang kamu punya</div>
+      <div class="chips">
+        <div class="chip" data-cat="net" data-col="#D97706" onclick="toggleChip(this)">Komunitas kampus aktif</div>
+        <div class="chip" data-cat="net" data-col="#D97706" onclick="toggleChip(this)">Alumni yang konek</div>
+        <div class="chip" data-cat="net" data-col="#D97706" onclick="toggleChip(this)">UMKM / bisnis lokal</div>
+        <div class="chip" data-cat="net" data-col="#D97706" onclick="toggleChip(this)">Komunitas profesional</div>
+        <div class="chip" data-cat="net" data-col="#D97706" onclick="toggleChip(this)">Media / jurnalis</div>
+        <div class="chip" data-cat="net" data-col="#D97706" onclick="toggleChip(this)">Dosen / akademisi</div>
+        <div class="chip" data-cat="net" data-col="#D97706" onclick="toggleChip(this)">Pemerintah / instansi</div>
+        <div class="chip" data-cat="net" data-col="#D97706" onclick="toggleChip(this)">Investor / mentor bisnis</div>
+      </div>
+      <div class="div-lbl">Bidang lainnya</div>
+      <div class="field">
+        <textarea class="textarea" id="know_custom" rows="2" placeholder="Bidang yang kamu kuasai yang tidak ada di atas..." maxlength="120" oninput="cc(this,'cc_kc',120)"></textarea>
+        <div class="char-c" id="cc_kc">0 / 120</div>
+      </div>
+    </div>
+    <div class="nav"><button class="btn-bk" onclick="go(3,2)">← Kembali</button><button class="btn-nx" onclick="go(3,4)">Lanjut <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <!-- S4: Penilaian Diri -->
+    <div class="scr" id="s4"><div class="sbody">
+      <div class="s-icon" style="background:#FEF3C7">⭐</div>
+      <h2 class="s-h">Nilai dirimu sendiri</h2>
+      <p class="s-p">Jujurlah — ini bukan ujian. Penilaian ini membantu menentukan fokus pengembanganmu.</p>
+      <div class="div-lbl">Tingkat kepercayaan diri</div>
+      <div class="sl-val" id="rv_conf">6 / 10</div>
+      <input type="range" id="sl_conf" min="1" max="10" value="6" step="1" oninput="rv(this,'rv_conf')">
+      <div class="sl-labels"><span>Belum percaya diri</span><span>Sangat percaya diri</span></div>
+
+      <div class="div-lbl" style="margin-top:28px">Pengalaman menghasilkan dari skill</div>
+      <div class="cg" id="sgExp">
+        <div class="ci" data-g="exp" data-v="none" onclick="pickCI(this)"><div class="ci-emoji">🌱</div><div class="ci-lbl">Belum pernah</div></div>
+        <div class="ci" data-g="exp" data-v="once" onclick="pickCI(this)"><div class="ci-emoji">🌿</div><div class="ci-lbl">Pernah 1–2x</div></div>
+        <div class="ci" data-g="exp" data-v="some" onclick="pickCI(this)"><div class="ci-emoji">🌳</div><div class="ci-lbl">Beberapa kali</div></div>
+        <div class="ci" data-g="exp" data-v="active" onclick="pickCI(this)"><div class="ci-emoji">🔥</div><div class="ci-lbl">Aktif sekarang</div></div>
+      </div>
+
+      <div class="div-lbl">Hambatan terbesar</div>
+      <div class="rcards" id="scHambat">
+        <div class="rc" data-v="pede" onclick="pickRC(this,'scHambat')">
+          <div class="rc-dot"></div>
+          <div><div class="rc-name">Kurang percaya diri</div><div class="rc-desc">"Skill saya masih belum cukup bagus untuk ditawarkan"</div></div>
+        </div>
+        <div class="rc" data-v="mana_mulai" onclick="pickRC(this,'scHambat')">
+          <div class="rc-dot"></div>
+          <div><div class="rc-name">Tidak tahu mulai dari mana</div><div class="rc-desc">"Banyak skill, tapi bingung mana yang harus difokuskan"</div></div>
+        </div>
+        <div class="rc" data-v="klien" onclick="pickRC(this,'scHambat')">
+          <div class="rc-dot"></div>
+          <div><div class="rc-name">Tidak tahu cara dapat klien</div><div class="rc-desc">"Sudah punya skill, tapi tidak tahu cara menawarkannya"</div></div>
+        </div>
+        <div class="rc" data-v="waktu" onclick="pickRC(this,'scHambat')">
+          <div class="rc-dot"></div>
+          <div><div class="rc-name">Waktu yang terbatas</div><div class="rc-desc">"Kuliah sudah menyita banyak waktu dan energi"</div></div>
+        </div>
+        <div class="rc" data-v="harga" onclick="pickRC(this,'scHambat')">
+          <div class="rc-dot"></div>
+          <div><div class="rc-name">Tidak tahu harus hargai berapa</div><div class="rc-desc">"Sering ragu kasih harga, takut terlalu mahal atau murah"</div></div>
+        </div>
+      </div>
+
+      <div class="div-lbl" style="margin-top:28px">Waktu yang bisa dialokasikan per minggu</div>
+      <div class="cg" id="sgTime">
+        <div class="ci" data-g="time" data-v="2" onclick="pickCI(this)"><div class="ci-emoji">⏱</div><div class="ci-lbl">1–2 jam/minggu</div></div>
+        <div class="ci" data-g="time" data-v="5" onclick="pickCI(this)"><div class="ci-emoji">⏰</div><div class="ci-lbl">3–5 jam/minggu</div></div>
+        <div class="ci" data-g="time" data-v="10" onclick="pickCI(this)"><div class="ci-emoji">🕐</div><div class="ci-lbl">5–10 jam/minggu</div></div>
+        <div class="ci" data-g="time" data-v="15+" onclick="pickCI(this)"><div class="ci-emoji">📅</div><div class="ci-lbl">10+ jam/minggu</div></div>
+      </div>
+    </div>
+    <div class="nav"><button class="btn-bk" onclick="go(4,3)">← Kembali</button><button class="btn-nx" onclick="go(4,5)">Lihat hasil <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </div>
+
+    <!-- S5: Hasil -->
+    <div class="scr" id="s5">
+      <div id="resArea"></div>
+      <div class="nav">
+        <button class="btn-bk" onclick="go(5,4)">← Edit</button>
+        <button class="btn-nx" style="font-size:14px" onclick="doShare()">
+          Simpan
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 17H5a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3M13 21l8-8-8-8v5H9v6h4v5z"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const STEP_LABELS = ['Langkah 1 dari 6','Langkah 2 dari 6','Langkah 3 dari 6','Langkah 4 dari 6','Langkah 5 dari 6','Hasil Mapping'];
+const STEP_NAMES  = ['Profil','Hard Skills','Soft Skills','Pengetahuan','Penilaian Diri','Hasil'];
+
+let cur = 0;
+const S = {};
+
+function startApp(){
+  document.getElementById('splash').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+}
+
+function cc(el, outId, max){ document.getElementById(outId).textContent = el.value.length + ' / ' + max; }
+function rv(el, outId){ document.getElementById(outId).textContent = el.value + ' / 10'; }
+
+function toggleChip(el){
+  el.classList.toggle('sel');
+  if(el.classList.contains('sel')){
+    el.style.background = el.dataset.col;
+    el.style.color = '#fff';
+    el.style.borderColor = el.dataset.col;
+  } else {
+    el.style.background = ''; el.style.color = ''; el.style.borderColor = '';
+  }
+}
+
+function pickCI(el){
+  const g = el.dataset.g;
+  document.querySelectorAll('.ci[data-g="'+g+'"]').forEach(x => x.classList.remove('sel'));
+  el.classList.add('sel');
+  S[g] = el.dataset.v;
+}
+
+function pickRC(el, cid){
+  document.querySelectorAll('#'+cid+' .rc').forEach(x => x.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function selChips(cat){
+  return [...document.querySelectorAll('.chip[data-cat="'+cat+'"].sel')].map(c => c.textContent.trim());
+}
+
+function go(from, to){
+  if(to === 5) buildResult();
+  const sf = document.getElementById('s'+from);
+  const st = document.getElementById('s'+to);
+  sf.classList.remove('on'); sf.classList.add('bye');
+  st.style.transform = to > from ? 'translateX(28px)' : 'translateX(-28px)';
+  st.style.opacity = '0'; st.classList.add('on');
+  requestAnimationFrame(()=>{ st.style.transition = 'opacity .25s ease, transform .25s ease'; st.style.transform = 'none'; st.style.opacity = '1'; });
+  setTimeout(()=>{ sf.classList.remove('bye'); sf.style.transform=''; sf.style.opacity=''; }, 280);
+  cur = to; updateHdr(to);
+  window.scrollTo && window.scrollTo(0,0);
+}
+
+function updateHdr(n){
+  for(let i=0;i<6;i++){
+    const d=document.getElementById('pg'+i); d.className='pg';
+    if(i<n) d.classList.add('done'); else if(i===n) d.classList.add('on');
+  }
+  document.getElementById('stepLbl').textContent = STEP_LABELS[n];
+  document.getElementById('stepNum').textContent  = STEP_NAMES[n];
+}
+
+function buildResult(){
+  const hard = selChips('hard'), soft = selChips('soft');
+  const know = selChips('know'), net  = selChips('net');
+  const hc   = (document.getElementById('hard_custom').value||'').trim();
+  const kc   = (document.getElementById('know_custom').value||'').trim();
+  const name = document.getElementById('p_nama').value.trim() || 'Kamu';
+  const jur  = document.getElementById('p_jurusan').value.trim();
+  const conf = parseInt(document.getElementById('sl_conf').value)||6;
+  const hambat = (document.querySelector('#scHambat .rc.sel')||{}).dataset?.v || 'pede';
+  const sem = S.sem||'3-4', exp = S.exp||'none', goal = S.goal||'tau_diri', time = S.time||'5';
+
+  const allHard = [...hard, ...(hc?[hc]:[])];
+  const total = allHard.length + soft.length + know.length + net.length;
+  const sH = Math.min(10, allHard.length*1.2), sS = Math.min(10, soft.length*1.0);
+  const sK = Math.min(10, know.length*1.3),    sN = Math.min(10, net.length*1.5);
+  const score = Math.round((sH+sS+sK+sN+conf)/5);
+
+  let tLabel, tIcon, tBg, tHdr, tDesc;
+  if(score>=7||total>=12){
+    tLabel='Skill Capital Tinggi'; tIcon='🔥';
+    tBg='linear-gradient(150deg,#1A1A2E,#2C3E50)'; tHdr='#F39C12';
+    tDesc='Kamu memiliki portofolio skill yang kuat dan beragam. Saatnya fokus monetisasi dan membangun personal brand.';
+  } else if(score>=4||total>=6){
+    tLabel='Skill Capital Berkembang'; tIcon='🌱';
+    tBg='linear-gradient(150deg,#1A3A1A,#16A34A)'; tHdr='#D1FAE5';
+    tDesc='Fondasi skill-mu sudah ada. Perdalam 1–2 skill unggulan dan mulai tawarkan ke orang-orang terdekat.';
+  } else {
+    tLabel='Skill Capital Dasar'; tIcon='🌿';
+    tBg='linear-gradient(150deg,#1E3A8A,#2563EB)'; tHdr='#DBEAFE';
+    tDesc='Ini titik awal yang jujur. Setiap ahli dulunya pemula. Pilih 1 skill untuk dipelajari serius selama 30 hari.';
+  }
+
+  const topSkill = allHard[0]||soft[0]||know[0]||'skill pilihanmu';
+  const topKnow  = know[0]||null;
+  const topNet   = net[0]||'';
+  const opps = buildOpps(topSkill, topKnow, net.length>0, topNet, goal, exp, hambat, allHard, soft, know, net);
+  const rm   = buildRM(hambat, exp, topSkill, time, goal);
+
+  const semLabel = sem==='lulus' ? 'Fresh Graduate / Alumni' : `Semester ${sem}`;
+  const expLabel = exp==='active' ? ' · Aktif freelance 🔥' : '';
+
+  document.getElementById('resArea').innerHTML = `
+    <div class="res-hero" style="background:${tBg}">
+      <div class="res-emoji">${tIcon}</div>
+      <div class="res-badge">${tLabel}</div>
+      <div class="res-title" style="color:${tHdr}">${name}</div>
+      <div class="res-sub" style="color:rgba(255,255,255,.75)">${tDesc}</div>
+    </div>
+    <div class="res-body anim">
+
+      <div class="prof-card">
+        <div class="prof-top">
+          <div class="prof-av">🧑‍🎓</div>
+          <div>
+            <div class="prof-name">${name}</div>
+            <div class="prof-sub">${jur?jur+' · ':''}${semLabel}${expLabel}</div>
+          </div>
+        </div>
+        <div class="prof-tags">
+          ${allHard.slice(0,3).map(s=>`<span class="prof-tag">💻 ${s}</span>`).join('')}
+          ${soft.slice(0,2).map(s=>`<span class="prof-tag">🤝 ${s}</span>`).join('')}
+          ${know.length?`<span class="prof-tag">📚 ${know[0]}</span>`:''}
+          ${total>5?`<span class="prof-tag">+${total-5} lainnya</span>`:''}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec-title">📊 Profil skill capital</div>
+        ${mBar('Hard Skills','#2563EB',Math.round(sH*10),allHard.length+' skill')}
+        ${mBar('Soft Skills','#7C3AED',Math.round(sS*10),soft.length+' skill')}
+        ${mBar('Knowledge','#0D9488',Math.round(sK*10),know.length+' bidang')}
+        ${mBar('Network','#D97706',Math.round(sN*10),net.length+' jaringan')}
+        ${mBar('Kepercayaan Diri','#8B0000',conf*10,conf+' / 10')}
+      </div>
+
+      ${total>0?`<div class="card">
+        <div class="sec-title">⚡ Skill & aset yang kamu miliki</div>
+        ${allHard.length?`<div class="sk-row"><div class="sk-dot" style="background:#2563EB"></div><div class="sk-txt"><b>Hard:</b> ${allHard.join(', ')}</div></div>`:''}
+        ${soft.length?`<div class="sk-row"><div class="sk-dot" style="background:#7C3AED"></div><div class="sk-txt"><b>Soft:</b> ${soft.join(', ')}</div></div>`:''}
+        ${know.length?`<div class="sk-row"><div class="sk-dot" style="background:#0D9488"></div><div class="sk-txt"><b>Knowledge:</b> ${[...know,...(kc?[kc]:[])].join(', ')}</div></div>`:''}
+        ${net.length?`<div class="sk-row"><div class="sk-dot" style="background:#D97706"></div><div class="sk-txt"><b>Network:</b> ${net.join(', ')}</div></div>`:''}
+      </div>`:''}
+
+      <div class="sec-title" style="margin-top:4px">💡 Peluang monetisasi untukmu</div>
+      ${opps.map((o,i)=>`
+        <div class="opp" style="background:${o.bg};border-left-color:${o.col}">
+          <div class="opp-n" style="background:${o.col}">${i+1}</div>
+          <div>
+            <div class="opp-cat" style="color:${o.col}">${o.cat}</div>
+            <div class="opp-t" style="color:${o.tc}">${o.title}</div>
+            <div class="opp-d" style="color:${o.dc}">${o.text}</div>
+            ${o.earn?`<div class="opp-earn" style="background:${o.col}">${o.earn}</div>`:''}
+          </div>
+        </div>`).join('')}
+
+      <div class="sec-title" style="margin-top:6px">🗺️ Roadmap 90 hari ke depan</div>
+      <div class="card"><div class="rm">
+        ${rm.map((r,i)=>`
+          <div class="rm-item">
+            <div class="rm-l"><div class="rm-c" style="background:${r.col}">${i+1}</div><div class="rm-line"></div></div>
+            <div class="rm-b">
+              <div class="rm-mo" style="color:${r.col}">${r.mo}</div>
+              <div class="rm-ti">${r.ti}</div>
+              <div class="rm-de">${r.de}</div>
+            </div>
+          </div>`).join('')}
+      </div></div>
+
+      <div class="focus-box">
+        <div class="focus-lbl">🎯 Fokus minggu ini</div>
+        <div class="focus-title">${wFocus(hambat, topSkill, exp)}</div>
+        <div class="focus-desc">${wDetail(hambat, topSkill, exp)}</div>
+      </div>
+
+      <button class="restart-btn" onclick="doRestart()">🔄 Mulai ulang mapping</button>
+    </div>`;
+}
+
+function mBar(lbl, col, pct, sub){
+  const p = Math.min(pct,100);
+  return `<div class="m-row">
+    <div class="m-top"><span class="m-lbl">${lbl} <span style="color:var(--hint);font-size:11px">${sub}</span></span><span class="m-val" style="color:${col}">${p}%</span></div>
+    <div class="m-track"><div class="m-fill" style="width:${p}%;background:${col}"></div></div>
+  </div>`;
+}
+
+function buildOpps(topH, topK, hasNet, topNet, goal, exp, hambat, allHard, soft, know, net){
+  const P = [
+    {col:'#2563EB',bg:'#EFF6FF',tc:'#1E3A8A',dc:'#1E40AF',cat:'Hard Skill'},
+    {col:'#7C3AED',bg:'#EDE9FE',tc:'#4C1D95',dc:'#5B21B6',cat:'Soft Skill'},
+    {col:'#0D9488',bg:'#F0FDFA',tc:'#134E4A',dc:'#0F766E',cat:'Knowledge'},
+    {col:'#D97706',bg:'#FFFBEB',tc:'#78350F',dc:'#92400E',cat:'Network'},
+    {col:'#DC2626',bg:'#FEF2F2',tc:'#7F1D1D',dc:'#991B1B',cat:'Produk Digital'},
+  ];
+  const o = [];
+  if(allHard.includes('Desain grafis')||allHard.includes('Ilustrasi digital'))
+    o.push({...P[0],title:'Freelance desain di Fiverr / Fastwork',text:'Buat 3 contoh karya (poster, logo sederhana, feed IG). Upload ke Fiverr, pasang harga Rp150rb–500rb. Tawarkan ke UMKM terdekat untuk dapat ulasan pertama.',earn:'Rp150rb – 2jt / proyek'});
+  if(allHard.includes('Edit video'))
+    o.push({...P[0],title:'Video editor untuk kreator & UMKM',text:'Banyak pemilik bisnis aktif di IG/TikTok tapi tidak bisa edit. Tawarkan jasa edit Reels atau video produk. Modal: HP + CapCut.',earn:'Rp100rb – 800rb / video'});
+  if(allHard.includes('Menulis / blogging')||allHard.includes('SEO / copywriting'))
+    o.push({...P[0],title:'Penulis konten / ghostwriter',text:'Content writer untuk website, caption medsos, atau artikel. Daftar ke Sribulancer, atau cari klien langsung di LinkedIn.',earn:'Rp50rb – 500rb / artikel'});
+  if(allHard.includes('Coding / pemrograman')||allHard.includes('Website / Wordpress'))
+    o.push({...P[0],title:'Bikin website / landing page UMKM',text:'Mulai dari Rp300rb untuk landing page sederhana Wordpress. Gratis untuk 1 klien pertama untuk bangun portofolio.',earn:'Rp300rb – 3jt / proyek'});
+  if(allHard.includes('Excel / spreadsheet')||allHard.includes('Analisis data'))
+    o.push({...P[0],title:'Asisten analisis & pembukuan UMKM',text:'Tawarkan jasa buat laporan keuangan sederhana atau dashboard Excel ke kenalan atau orang tua yang punya bisnis.',earn:'Rp200rb – 1jt / bulan'});
+  if(allHard.includes('Fotografi'))
+    o.push({...P[0],title:'Fotografer produk untuk UMKM & F&B',text:'Foto produk yang bagus = penjualan naik. Tawarkan sesi foto 1-2 jam ke warung atau kafe sekitar kampus.',earn:'Rp150rb – 500rb / sesi'});
+  if(soft.includes('Mengajar / mentoring')||soft.includes('Public speaking'))
+    o.push({...P[1],title:'Tutor / les privat',text:`Ajarkan ${topH} ke adik kelas atau anak SMP/SMA. Bisa online via Zoom. Tawarkan ke grup alumni sekolah melalui WhatsApp.`,earn:'Rp50rb – 300rb / sesi'});
+  if(soft.includes('MC / moderator')||soft.includes('Fasilitasi diskusi'))
+    o.push({...P[1],title:'MC / moderator acara kampus & komunitas',text:'Banyak event dan webinar yang butuh MC. Bangun portofolio dari acara gratis dulu, lalu mulai tarifkan.',earn:'Rp200rb – 1jt / acara'});
+  if(topK)
+    o.push({...P[2],title:`Konsultasi & edukasi bidang ${topK}`,text:`Pengetahuanmu di ${topK} sangat berharga. Buat konten edukasi di IG atau TikTok, lalu buka sesi konsultasi atau workshop.`,earn:'Rp100rb – 500rb / sesi'});
+  if(hasNet&&topNet)
+    o.push({...P[3],title:`Leverage jaringan ${topNet}`,text:'Tawarkan skill-mu ke koneksi yang sudah ada — jauh lebih mudah dapat proyek dari orang yang mengenalmu.',earn:'Bergantung proyek'});
+  if(allHard.includes('Desain grafis')||allHard.length>=3)
+    o.push({...P[4],title:'Jual produk digital',text:'Buat template Canva, preset foto, atau modul belajar. Upload sekali, jual berkali-kali di Gumroad atau Tokopedia.',earn:'Rp20rb – 200rb / unit'});
+  if(o.length===0){
+    o.push({...P[0],title:'Mulai dari skill yang paling kamu suka',text:'Pilih 1 kemampuan, pelajari 30 hari, lalu tawarkan ke 1 orang terdekat — gratis dulu untuk bangun kepercayaan.',earn:''});
+    o.push({...P[1],title:'Monetisasi soft skill-mu',text:'Kemampuan komunikasi, organisasi, atau mengajar bisa langsung dijual ke lingkaran terdekatmu.',earn:''});
+  }
+  return o.slice(0,4);
+}
+
+function buildRM(hambat, exp, topS, time, goal){
+  return [
+    {col:'#8B0000', mo:'Bulan 1 — Fondasi',
+     ti: exp==='active'?'Optimasi profil & portofolio':'Buat 1 portofolio nyata',
+     de: exp==='active'?'Rapikan profil Fiverr/LinkedIn. Minta klien lama beri review/testimoni.':`Buat 1 contoh karya dari "${topS}" — tidak perlu sempurna. Yang penting ada yang bisa ditunjukkan.`},
+    {col:'#D97706', mo:'Bulan 2 — Aksi pertama',
+     ti: hambat==='klien'?'Dapatkan klien pertama':hambat==='harga'?'Tetapkan harga & tawarkan':'Tawarkan ke 5 orang',
+     de: hambat==='klien'?'Daftar di Sribulancer, Fastwork, atau Fiverr. Hubungi 10 UMKM lokal via DM Instagram.'
+       : hambat==='harga'?'Riset harga pasar di Fiverr/Fastwork. Tetapkan 3 paket harga. Tawarkan paket termurah dulu.'
+       : 'Hubungi 5 orang dari jaringan terdekatmu. Tawarkan bantuan — gratis atau harga sahabat dulu.'},
+    {col:'#16A34A', mo:'Bulan 3 — Pertumbuhan',
+     ti: goal==='freelance'||goal==='sidehustle'?'Capai penghasilan pertama':'Bangun personal brand',
+     de: goal==='freelance'||goal==='sidehustle'?`Target Rp${time==='2'?'200':time==='5'?'500':'1.000'}rb dari skill-mu. Reinvest untuk upgrade tools atau kursus.`
+       : 'Buat 1 konten per minggu di platform pilihanmu. Bangun reputasi sebelum agresif menawarkan jasa.'},
+  ];
+}
+
+function wFocus(hambat, topS, exp){
+  if(exp==='active') return 'Tingkatkan kualitas & naikkan tarif';
+  if(hambat==='pede') return `Buat 1 karya dari "${topS}" hari ini`;
+  if(hambat==='mana_mulai') return 'Pilih SATU skill dan fokuslah';
+  if(hambat==='klien') return 'Hubungi 3 orang via WhatsApp hari ini';
+  if(hambat==='harga') return 'Riset harga di Fiverr dan Fastwork';
+  if(hambat==='waktu') return 'Blok 30 menit/hari khusus untuk skill';
+  return 'Ambil satu langkah kecil hari ini';
+}
+function wDetail(hambat, topS, exp){
+  if(exp==='active') return 'Kamu sudah punya pengalaman — saatnya naikkan tarif 20–30% dan minta klien lama memberikan review tertulis.';
+  if(hambat==='pede') return `Jangan tunggu "siap". Buat 1 contoh karya dari "${topS||'skill pilihanmu'}" dan simpan sebagai portofolio. Kualitas naik seiring pengalaman.`;
+  if(hambat==='mana_mulai') return 'Dari semua yang kamu pilih, pilih 1 skill yang paling kamu sukai. Dedikasikan 30 menit hari ini. Fokus adalah superpower.';
+  if(hambat==='klien') return 'Buka WhatsApp. Cari 3 kontak yang punya bisnis. Kirim: "Hei, aku lagi menerima project [skill]. Kalau butuh, boleh hubungi aku."';
+  if(hambat==='harga') return `Buka Fiverr.com, cari kategori "${topS||'skill kamu'}". Lihat seller dengan ulasan banyak, berapa harga mereka? Mulai 20% lebih murah dari harga tengah.`;
+  if(hambat==='waktu') return 'Blok 30 menit setiap malam sebelum tidur khusus untuk skill. Matikan notifikasi. 30 menit konsisten > 5 jam sekali-sekali.';
+  return 'Pilih satu tindakan konkret yang bisa selesai dalam 24 jam ke depan. Bukan rencana — tindakan.';
+}
+
+function doRestart(){
+  document.querySelectorAll('.chip.sel').forEach(c=>{c.classList.remove('sel');c.style.background='';c.style.color='';c.style.borderColor='';});
+  document.querySelectorAll('.ci.sel').forEach(c=>c.classList.remove('sel'));
+  document.querySelectorAll('.rc.sel').forEach(c=>c.classList.remove('sel'));
+  ['p_nama','p_jurusan','hard_custom','know_custom'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('sl_conf').value=6;
+  document.getElementById('rv_conf').textContent='6 / 10';
+  ['cc_nama','cc_jur','cc_hc','cc_kc'].forEach(id=>document.getElementById(id).textContent='0 / '+(id.includes('nama')?50:id.includes('jur')?60:120));
+  Object.keys(S).forEach(k=>delete S[k]);
+  go(5,0);
+}
+
+function doShare(){
+  const name = document.getElementById('p_nama').value.trim()||'Peserta';
+  const hard = selChips('hard'), soft = selChips('soft'), know = selChips('know'), net = selChips('net');
+  const msg = `[LONTARA 2026 - Skill Capital Mapping]\nNama: ${name}\nHard Skills: ${hard.join(', ')||'-'}\nSoft Skills: ${soft.join(', ')||'-'}\nKnowledge: ${know.join(', ')||'-'}\nNetwork: ${net.join(', ')||'-'}\nTotal skill: ${hard.length+soft.length+know.length+net.length}`;
+  if(navigator.share){ navigator.share({title:'Skill Capital Mapping LONTARA 2026',text:msg}); }
+  else if(navigator.clipboard){ navigator.clipboard.writeText(msg).then(()=>alert('Hasil disalin!')); }
+  else { alert(msg); }
+}
+</script>
+</body>
+</html>
